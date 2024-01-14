@@ -1,39 +1,45 @@
-import React from "react";
-import {
-  Button,
-  Drawer,
-  DrawerBody,
-  DrawerContent,
-  DrawerHeader,
-  DrawerOverlay,
-  HStack,
-  Heading,
-  VStack,
-  useDisclosure,
-} from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import { Button, HStack, Heading, useDisclosure } from "@chakra-ui/react";
 import { RiMenu5Fill } from "react-icons/ri";
+import Navbar from "../Drawer/Drawer";
 import { Link } from "react-router-dom";
 
-//Remember to DeStructure
-const LinkButton = ({ url = "/", title = "Home", onClose }) => {
-  return (
-    <>
-      <Link onClick={onClose} to={url}>
-        <Button variant={"outline"}> {title}</Button>
-      </Link>
-    </>
-  );
-};
-
 const Header = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const handleScroll = () => {
+    const scrollPercentage = (window.scrollY / window.innerHeight) * 100;
+    setIsScrolled(scrollPercentage > 2 ? true : false);
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <>
-      <HStack justifyContent={"space-between"} p={"2vh 2vw"} zIndex={10}>
-        <Heading fontFamily={"Jockey One"} color={"black"}>
-          PlayBrutal
-        </Heading>
+      <HStack
+        justifyContent={"space-between"}
+        h={"11vh"}
+        p={"2vw"}
+        zIndex={isScrolled ? 50 : "auto"}
+        position={"fixed"}
+        top={0}
+        width="100%"
+        background={"white"}
+        boxShadow={isScrolled ? "0 0 10px rgba(0, 0, 0, 0.6)" : "none"}
+        transition="box-shadow 0.3s, margin-botttom: 0.3s"
+      >
+        <Link to={"/"}>
+          <Heading fontFamily={"Jockey One"} color={"black"}>
+            PlayBrutal
+          </Heading>
+        </Link>
+
         <Button
           bg={"white"}
           color={"black"}
@@ -52,28 +58,7 @@ const Header = () => {
       </HStack>
 
       {/* Drawer */}
-      <Drawer placement="left" onClose={onClose} isOpen={isOpen}>
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerHeader borderBottomWidth={"1px"}>PlayBrutal</DrawerHeader>
-          <DrawerBody mt={4}>
-            <VStack spacing={"4"} alignItems={"flex-start"}>
-              <LinkButton onClose={onClose} url={"/"} title={"Home"} />
-              <LinkButton
-                onClose={onClose}
-                url={"/games"}
-                title={"Browse All Games"}
-              />
-              <LinkButton
-                onClose={onClose}
-                url={"/contact"}
-                title={"Contact Us"}
-              />
-              <LinkButton onClose={onClose} url={"/about"} title={"About"} />
-            </VStack>
-          </DrawerBody>
-        </DrawerContent>
-      </Drawer>
+      <Navbar isOpen={isOpen} onClose={onClose} />
     </>
   );
 };

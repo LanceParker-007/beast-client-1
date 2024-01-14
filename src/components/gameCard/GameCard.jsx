@@ -11,11 +11,11 @@ import {
 import React from "react";
 import { Link } from "react-router-dom";
 
-const GameCard = () => {
+const GameCard = ({ gameTitle, gameCategory, cardLink = "", ...props }) => {
   return (
     <div>
-      <Card bg={"transparent"} boxShadow={"none"} p={0}>
-        <Link to={""}>
+      <Card boxShadow={"none"} p={0}>
+        <Link to={cardLink}>
           <CardBody
             w={["354px", "425px"]}
             h={["311px", "340px"]}
@@ -25,10 +25,11 @@ const GameCard = () => {
               boxShadow:
                 "0 -1px 0 rgba(0, 0, 0, 0.04), 0 1px 1px rgba(0, 0, 0, 0.25)",
               backgroundColor: "#F5F5F5",
-              transition: "background-color 0.6s, box-shadow 0.6s",
+              transition: "background-color 0.4s, box-shadow 0.4s",
             }}
+            {...props}
           >
-            <VStack w={"100%"} h={"100%"} p={2}>
+            <VStack w={"100%"} h={"100%"} px={2} pt={2} pb={4}>
               <Box p={0} h={"80%"} w={"100%"}>
                 <Image
                   src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
@@ -50,10 +51,10 @@ const GameCard = () => {
 
                 <VStack w={"80%"} alignItems={"flex-start"} gap={0}>
                   <Heading fontSize={"100%"} color={"#202124"}>
-                    Drift Max Pro Car Racing Game
+                    {gameTitle}
                   </Heading>
                   <Text fontSize={"smaller"} color={"#5F6368"}>
-                    Racing
+                    {gameCategory}
                   </Text>
                 </VStack>
               </HStack>

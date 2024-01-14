@@ -2,7 +2,12 @@ import { Box, HStack, Heading, Text } from "@chakra-ui/react";
 import React from "react";
 import GameCard from "../gameCard/GameCard";
 
-const GameCategoryRow = ({ categoryHeading }) => {
+const GameCategoryRow = ({
+  rowHeading,
+  rowSubHeading,
+  gameTitle,
+  gameCategory,
+}) => {
   return (
     <Box className="gameCategoryRow" h={"400px"} mb={14}>
       <Box w={"100%"} height={"14%"} px={"3vw"} mb={[1, 5]}>
@@ -20,12 +25,30 @@ const GameCategoryRow = ({ categoryHeading }) => {
           justifyContent={"space-between"}
           css={{ "&::-webkit-scrollbar": { height: "8px" } }}
         >
-          <GameCard />
-          <GameCard />
-          <GameCard />
-          <GameCard />
-          <GameCard />
-          <GameCard />
+          <GameCard
+            gameTitle={"Drift Max Pro Car Racing Game"}
+            gameCategory={"Racing"}
+          />
+          <GameCard
+            gameTitle={"Drift Max Pro Car Racing Game"}
+            gameCategory={"Racing"}
+          />
+          <GameCard
+            gameTitle={"Drift Max Pro Car Racing Game"}
+            gameCategory={"Racing"}
+          />
+          <GameCard
+            gameTitle={"Drift Max Pro Car Racing Game"}
+            gameCategory={"Racing"}
+          />
+          <GameCard
+            gameTitle={"Drift Max Pro Car Racing Game"}
+            gameCategory={"Racing"}
+          />
+          <GameCard
+            gameTitle={"Drift Max Pro Car Racing Game"}
+            gameCategory={"Racing"}
+          />
           <Text
             _hover={{
               backgroundColor: "#F5F5F5",

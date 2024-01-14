@@ -4,7 +4,7 @@ import GameCategoryRow from "../components/gameCategoryRow/GameCategoryRow";
 
 const AllGames = () => {
   return (
-    <Box className="allGames" minHeight={"100vh"} my={"2vh"}>
+    <Box className="allGames" minHeight={"100vh"} my={"11vh"}>
       <GameCategoryRow />
       <GameCategoryRow />
       <GameCategoryRow />

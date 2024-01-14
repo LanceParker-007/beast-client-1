@@ -1,0 +1,82 @@
+.features {
+  border-radius: 8px;
+  border: 1px solid greenyellow;
+  min-height: 10vh;
+  background: linear-gradient(-25deg, #00081d 79%, rgb(36, 36, 36) 100%);
+  border: 10px;
+  margin: 0 6vw 2vw;
+  z-index: 10;
+  position: absolute;
+}
+
+@media screen and (max-width: 600px) {
+  .features {
+    margin: 0 1rem;
+  }
+}
+
+// Features-card
+.featuresCardContainer {
+  width: 80%;
+  margin: 0 auto;
+  box-sizing: border-box;
+  padding: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  color: white;
+  justify-content: center;
+  align-items: center;
+}
+
+.featuresCardContainer-left {
+  // background-color: wheat;
+  width: 50%;
+  box-sizing: border-box;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.featuresCardContainer-left > h2 {
+  width: 100%;
+  padding: 0.5rem;
+  letter-spacing: 0.1rem;
+  font-size: large;
+}
+
+.featuresCardContainer-left > p {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: smaller;
+}
+
+.featuresCardContainer-right {
+  // background-color: green;
+  width: 50%;
+  box-sizing: border-box;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.featuresCardContainer-right > img {
+  width: 90%;
+  box-sizing: border-box;
+}
+
+@media screen and (max-width: 600px) {
+  .featuresCardContainer-left {
+    width: 100%;
+  }
+
+  .featuresCardContainer-right {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .featuresCardContainer-right > img {
+    width: 10rem;
+  }
+}

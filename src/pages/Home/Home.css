@@ -1,0 +1,156 @@
+section {
+  height: 100vh;
+  /* border: 1px solid red; */
+  position: relative;
+}
+
+/* section 1 */
+.custom-shape-divider-bottom-1703187378 {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  transform: rotate(180deg);
+}
+
+.custom-shape-divider-bottom-1703187378 svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 92px;
+}
+
+#hero-section {
+  background-color: rgb(36, 36, 36);
+}
+
+.hero-section-top-curve {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  fill: white;
+}
+
+.hero-section-top-curve svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 59px;
+}
+
+.hero-section-top-curve .shape-fill {
+  fill: #ffffff;
+}
+
+#about-us {
+  height: 100vh;
+}
+
+/* section 2: about-us */
+.about-us-top-curve {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.about-us-top-curve svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 115px;
+}
+
+.about-us-top-curve .shape-fill {
+  fill: #242424;
+}
+
+.container {
+  width: 100%;
+  min-height: 80vh;
+  column-gap: 40px;
+  padding: 60px 6%;
+}
+
+.container .side-info {
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #fff;
+  margin-top: 12px;
+}
+
+.container .side-info span {
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-size: 16px;
+  color: #717171;
+}
+
+.container .side-info h1 {
+  text-transform: capitalize;
+  letter-spacing: 0.8px;
+  font-family: "Roboto", sans-serif;
+  font-weight: 900;
+  font-size: 56px;
+  background-color: #005baa;
+  background-image: linear-gradient(45deg, #005baa, #000000);
+  background-size: 100%;
+  background-repeat: repeat;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-background-clip: text;
+  -moz-text-fill-color: transparent;
+}
+
+.container .side-info hr {
+  display: block;
+  background: #005baa;
+  height: 4px;
+  width: 20%;
+  margin: 18px 0;
+}
+
+/* Responsive Design */
+@media (max-width: 800px) {
+  #about-us {
+    height: 74vh;
+  }
+}
+
+@media (min-width: 800px) {
+  .container {
+    display: flex;
+    align-items: center;
+  }
+
+  .container .side-info {
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 500px) {
+  #about-us {
+    height: 70vh;
+  }
+
+  .container .side-info {
+    margin-top: 0px;
+    margin-bottom: 10px;
+  }
+
+  .container .side-info h1 {
+    font-size: 46px;
+  }
+
+  .container .side-info p {
+    font-size: 14px;
+  }
+}
