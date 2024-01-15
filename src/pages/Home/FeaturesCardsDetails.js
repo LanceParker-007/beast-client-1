@@ -1,5 +1,7 @@
-import videoWithBackgroundColor from "../../assets/videos/background_color.mp4";
-import videoWithTransparentBackground from "../../assets/videos/transparent_background.mp4";
+const videoWithBackgroundColor =
+  "https://res.cloudinary.com/dk2fcl7bi/video/upload/v1705339049/playbrutal-games-thumbnails/winRealMoneyFeaturesVideo.mp4";
+const videoWithTransparentBackground =
+  "https://res.cloudinary.com/dk2fcl7bi/video/upload/v1705339049/playbrutal-games-thumbnails/winRealMoneyFeaturesVideo.mp4";
 
 const features = [
   {
