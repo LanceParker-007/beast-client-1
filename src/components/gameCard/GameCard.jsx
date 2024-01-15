@@ -11,7 +11,14 @@ import {
 import React from "react";
 import { Link } from "react-router-dom";
 
-const GameCard = ({ gameTitle, gameCategory, cardLink = "", ...props }) => {
+const GameCard = ({
+  gameTitle,
+  gameCategory,
+  gameThumbnailSmallSrc = "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80",
+  gameThumbnailLargeSrc = "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80",
+  cardLink = "",
+  ...props
+}) => {
   return (
     <div>
       <Card boxShadow={"none"} p={0}>
@@ -32,7 +39,7 @@ const GameCard = ({ gameTitle, gameCategory, cardLink = "", ...props }) => {
             <VStack w={"100%"} h={"100%"} px={2} pt={2} pb={4}>
               <Box p={0} h={"80%"} w={"100%"}>
                 <Image
-                  src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
+                  src={gameThumbnailLargeSrc}
                   alt="Green double couch with wooden legs"
                   borderRadius="lg"
                   boxSize={"100%"}
@@ -42,7 +49,7 @@ const GameCard = ({ gameTitle, gameCategory, cardLink = "", ...props }) => {
               <HStack justifyContent={"flex-start"} w={"100%"} h={"20%"}>
                 <Box w={"56px"} h={"56px"}>
                   <Image
-                    src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
+                    src={gameThumbnailSmallSrc}
                     alt="Green double couch with wooden legs"
                     borderRadius={10}
                     boxSize={"100%"}

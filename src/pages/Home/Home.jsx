@@ -6,6 +6,7 @@ import { HStack } from "@chakra-ui/react";
 import GameCard from "../../components/gameCard/GameCard";
 import features from "./FeaturesCardsDetails.js";
 import FeaturesCard from "./FeaturesCard";
+import { image } from "../../useAssets/useAssets.js";
 
 const Home = () => {
   return (
@@ -32,7 +33,6 @@ const Home = () => {
             <Link to="/games">Play</Link>
           </div>
           <HStack
-            className="side-images"
             overflowX={"auto"}
             css={{
               "&::-webkit-scrollbar": {
@@ -50,9 +50,23 @@ const Home = () => {
               gameTitle={"Image 1"}
               gameCategory={"Category 1"}
               cursor={"grab"}
+              gameThumbnailLargeSrc={image.clickWarsFight}
+              gameThumbnailSmallSrc={image.clickWarsFight}
             />
-            <GameCard gameTitle={"Image 2"} gameCategory={"Category 2"} />
-            <GameCard gameTitle={"Image 2"} gameCategory={"Category 2"} />
+            <GameCard
+              gameTitle={"Image 2"}
+              gameCategory={"Category 2"}
+              cursor={"grab"}
+              gameThumbnailLargeSrc={image.clickWar}
+              gameThumbnailSmallSrc={image.clickWar}
+            />
+            <GameCard
+              gameTitle={"Image 2"}
+              gameCategory={"Category 2"}
+              cursor={"grab"}
+              gameThumbnailLargeSrc={image.clickWarsBattleRoyal}
+              gameThumbnailSmallSrc={image.clickWarsBattleRoyal}
+            />
           </HStack>
         </div>
       </section>

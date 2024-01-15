@@ -1,6 +1,7 @@
 import { Box, HStack, Heading, Text } from "@chakra-ui/react";
 import React from "react";
 import GameCard from "../gameCard/GameCard";
+import { image } from "../../useAssets/useAssets";
 
 const GameCategoryRow = ({
   rowHeading,
@@ -28,26 +29,21 @@ const GameCategoryRow = ({
           <GameCard
             gameTitle={"Drift Max Pro Car Racing Game"}
             gameCategory={"Racing"}
+            gameThumbnailLargeSrc={image.clickWar}
+            gameThumbnailSmallSrc={image.clickWar}
+          />
+
+          <GameCard
+            gameTitle={"Drift Max Pro Car Racing Game"}
+            gameCategory={"Racing"}
+            gameThumbnailLargeSrc={image.clickWarsBattleRoyal}
+            gameThumbnailSmallSrc={image.clickWarsBattleRoyal}
           />
           <GameCard
             gameTitle={"Drift Max Pro Car Racing Game"}
             gameCategory={"Racing"}
-          />
-          <GameCard
-            gameTitle={"Drift Max Pro Car Racing Game"}
-            gameCategory={"Racing"}
-          />
-          <GameCard
-            gameTitle={"Drift Max Pro Car Racing Game"}
-            gameCategory={"Racing"}
-          />
-          <GameCard
-            gameTitle={"Drift Max Pro Car Racing Game"}
-            gameCategory={"Racing"}
-          />
-          <GameCard
-            gameTitle={"Drift Max Pro Car Racing Game"}
-            gameCategory={"Racing"}
+            gameThumbnailLargeSrc={image.clickWarsFight}
+            gameThumbnailSmallSrc={image.clickWarsFight}
           />
           <Text
             _hover={{

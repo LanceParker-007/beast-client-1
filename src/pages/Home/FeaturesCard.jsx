@@ -20,13 +20,12 @@ const FeaturesCard = ({
           ) : (
             <></>
           )}
+          {console.log(FeaturesCardVideo)}
           {FeaturesCardVideo ? (
-            <video controls width={"100px"} height={"100px"}>
+            <video autoPlay loop muted playsInline width={"70%"} height={"60%"}>
               {" "}
-              <source
-                src={"src/assets/videos/background_color.mp4"}
-                type="video/mp4"
-              />
+              <source src={FeaturesCardVideo} type="video/mp4" />
+              Your browser does not support the video tag.
             </video>
           ) : (
             <></>

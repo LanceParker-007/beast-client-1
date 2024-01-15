@@ -59,6 +59,7 @@ section {
   width: 100%;
   overflow: hidden;
   line-height: 0;
+  margin-top: -10px;
 }
 
 .about-us-top-curve svg {

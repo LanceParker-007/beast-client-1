@@ -1,12 +1,25 @@
 import { Box, Heading, Text } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ResultTable from "../components/resultTable/ResultTable";
 import ClickRoyal from "./Games/ClickRoyal";
+import axios from "axios";
 
 const GameScreen = ({ children }) => {
   const { gameId } = useParams();
-  console.log(gameId);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [tableData, setTableData] = useState([]);
+
+  const fetchScores = async () => {
+    const { data } = axios.get(`https://dummyjson.com/products`);
+    setTableData(data);
+  };
+
+  useEffect(() => {
+    fetchScores();
+  }, []);
 
   return (
     <Box>

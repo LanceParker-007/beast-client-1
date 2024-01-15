@@ -14,6 +14,7 @@ const Footer = () => {
       minHeight={"60vh"}
       width={"100%"}
       color={"#5F6368"}
+      marginTop={["16rem", "12rem"]}
     >
       <Box
         m={"6vh 3vw"}
