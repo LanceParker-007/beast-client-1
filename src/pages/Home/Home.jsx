@@ -59,6 +59,7 @@ const Home = () => {
               cursor={"grab"}
               gameThumbnailLargeSrc={image.clickWar}
               gameThumbnailSmallSrc={image.clickWar}
+              cardLink="/games/click-war"
             />
             <GameCard
               gameTitle={"Image 2"}
@@ -66,7 +67,6 @@ const Home = () => {
               cursor={"grab"}
               gameThumbnailLargeSrc={image.clickWarsBattleRoyal}
               gameThumbnailSmallSrc={image.clickWarsBattleRoyal}
-              cardLink="/games/click-royal"
             />
           </HStack>
         </div>
