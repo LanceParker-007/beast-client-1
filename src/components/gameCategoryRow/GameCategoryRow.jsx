@@ -31,6 +31,7 @@ const GameCategoryRow = ({
             gameCategory={"Racing"}
             gameThumbnailLargeSrc={image.clickWar}
             gameThumbnailSmallSrc={image.clickWar}
+            cardLink="/games/click-royal"
           />
 
           <GameCard
