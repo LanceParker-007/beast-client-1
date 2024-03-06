@@ -1,15 +1,15 @@
 import { Box, Heading, Text } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 import ResultTable from "../components/resultTable/ResultTable";
 import ClickRoyal from "./Games/ClickRoyal";
 import axios from "axios";
 
 const GameScreen = ({ children }) => {
-  const { gameId } = useParams();
+  // const { gameId } = useParams();
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const [totalPages, setTotalPages] = useState(0);
   const [tableData, setTableData] = useState([]);
 
   const fetchScores = async () => {
@@ -30,7 +30,7 @@ const GameScreen = ({ children }) => {
       {/* Results Screen */}
       <Box paddingX={[2, 10, 10, 20, 40, 50]} marginX={[0, 20]}>
         <Heading fontFamily={"Jockey One"}>Rankings</Heading>
-        <ResultTable />
+        <ResultTable tableData={tableData} />
 
         {/* ---Game-screen footer */}
         <Text>

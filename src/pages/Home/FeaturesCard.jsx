@@ -20,7 +20,6 @@ const FeaturesCard = ({
           ) : (
             <></>
           )}
-          {console.log(FeaturesCardVideo)}
           {FeaturesCardVideo ? (
             <video autoPlay loop muted playsInline width={"70%"} height={"60%"}>
               {" "}

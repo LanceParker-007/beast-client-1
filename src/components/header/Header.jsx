@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Button, HStack, Heading, useDisclosure } from "@chakra-ui/react";
-import { RiMenu5Fill } from "react-icons/ri";
+import { RiAccountCircleFill, RiMenu5Fill } from "react-icons/ri";
 import Navbar from "../Drawer/Drawer";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const navigate = useNavigate();
 
   const handleScroll = () => {
     const scrollPercentage = (window.scrollY / window.innerHeight) * 100;
@@ -30,31 +31,58 @@ const Header = () => {
         position={"fixed"}
         top={0}
         width="100%"
-        background={"white"}
-        boxShadow={isScrolled ? "0 0 10px rgba(0, 0, 0, 0.6)" : "none"}
-        transition="box-shadow 0.3s, margin-botttom: 0.3s"
+        background={isScrolled ? "white" : "black"}
+        color={isScrolled ? "white" : "black"}
+        boxShadow={
+          isScrolled
+            ? "0 0 11px rgba(0, 0, 0, 0.6)"
+            : "0 0 2px rgba(0, 0, 0, 0.6)"
+        }
+        transition="all .6s"
       >
         <Link to={"/"}>
-          <Heading fontFamily={"Jockey One"} color={"black"}>
+          <Heading
+            fontFamily={"Jockey One"}
+            color={isScrolled ? "black" : "white"}
+          >
             PlayBrutal
           </Heading>
         </Link>
 
-        <Button
-          bg={"white"}
-          color={"black"}
-          width={"12"}
-          height={"12"}
-          rounded={"full"}
-          onClick={onOpen}
-          margin={"4px"}
-          _hover={{
-            boxShadow:
-              "0 -1px 0 rgba(0, 0, 0, 0.04), 0 1px 1px rgba(0, 0, 0, 0.25)",
-          }}
-        >
-          <RiMenu5Fill size={"24vh"} />
-        </Button>
+        <HStack>
+          <Button
+            bg={isScrolled ? "#FBFBFF" : "black"}
+            color={isScrolled ? "black" : "white"}
+            width={"12"}
+            height={"12"}
+            rounded={"full"}
+            onClick={onOpen}
+            margin={"4px"}
+            _hover={{
+              boxShadow:
+                "0 -1px 0 rgba(0, 0, 0, 0.04), 0 1px 1px rgba(0, 0, 0, 0.25)",
+            }}
+          >
+            <RiMenu5Fill size={"24vh"} />
+          </Button>
+          <Button
+            bg={isScrolled ? "#FBFBFF" : "black"}
+            color={isScrolled ? "black" : "white"}
+            width={"12"}
+            height={"12"}
+            rounded={"full"}
+            onClick={() => {
+              navigate("/manage-account");
+            }}
+            margin={"4px"}
+            _hover={{
+              boxShadow:
+                "0 -1px 0 rgba(0, 0, 0, 0.04), 0 1px 1px rgba(0, 0, 0, 0.25)",
+            }}
+          >
+            <RiAccountCircleFill />
+          </Button>
+        </HStack>
       </HStack>
 
       {/* Drawer */}

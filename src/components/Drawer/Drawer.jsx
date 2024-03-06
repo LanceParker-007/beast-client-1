@@ -31,11 +31,6 @@ const LinkButton = ({ url = "/", title = "Home", onClose }) => {
 };
 
 const Navbar = ({ user = null, isOpen, onClose }) => {
-  //   user = {
-  //     name: "User",
-  //     email: "user@example.com",
-  //   };
-
   return (
     <Drawer placement="left" onClose={onClose} isOpen={isOpen}>
       <DrawerOverlay />

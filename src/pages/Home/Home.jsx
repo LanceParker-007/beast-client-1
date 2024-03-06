@@ -41,7 +41,7 @@ const Home = () => {
               "::-webkit-scrollbar-thumb": {
                 // height: "100px",
                 borderRadius: "10px",
-                "-webkit-box-shadow": "inset 0 0 6px rgba(0,0,0,.3)",
+                WebkitBoxShadow: "inset 0 0 6px rgba(0,0,0,.3)",
               },
             }}
             cursor={"grab"}
