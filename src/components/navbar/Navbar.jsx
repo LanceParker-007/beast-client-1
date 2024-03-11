@@ -11,7 +11,7 @@ import {
 import React from "react";
 import { RiLogoutBoxLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
-import SignInWithGoogleButton from "../signInWithGoogleButton/SignInWithGoogleButton";
+// import SignInWithGoogleButton from "../signInWithGoogleButton/SignInWithGoogleButton";
 
 //Remember to DeStructure
 const LinkButton = ({ url = "/", title = "Home", onClose }) => {
@@ -59,9 +59,7 @@ const Navbar = ({ user = null, isOpen, onClose }) => {
                 </Button>
               ) : (
                 <>
-                  <HStack>
-                    <SignInWithGoogleButton />
-                  </HStack>
+                  <HStack>{/* <SignInWithGoogleButton /> */}</HStack>
                 </>
               )}
             </HStack>
