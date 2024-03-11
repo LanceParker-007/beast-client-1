@@ -3,7 +3,7 @@ import "./Home.css";
 import "./Home.scss";
 import { Link } from "react-router-dom";
 import { HStack } from "@chakra-ui/react";
-import GameCard from "../../components/gameCard/GameCard";
+import MainCard from "../../components/gameCard/MainCard";
 import features from "./FeaturesCardsDetails.js";
 import FeaturesCard from "./FeaturesCard";
 import { image } from "../../useAssets/useAssets.js";
@@ -46,24 +46,24 @@ const Home = () => {
             }}
             cursor={"grab"}
           >
-            <GameCard
-              gameTitle={"Image 1"}
-              gameCategory={"Category 1"}
+            <MainCard
+              cardHeading={"Image 1"}
+              cardSubHeading={"Category 1"}
               cursor={"grab"}
               gameThumbnailLargeSrc={image.clickWarsFight}
               gameThumbnailSmallSrc={image.clickWarsFight}
             />
-            <GameCard
-              gameTitle={"Image 2"}
-              gameCategory={"Category 2"}
+            <MainCard
+              cardHeading={"Image 2"}
+              cardSubHeading={"Category 2"}
               cursor={"grab"}
               gameThumbnailLargeSrc={image.clickWar}
               gameThumbnailSmallSrc={image.clickWar}
               cardLink="/games/click-war"
             />
-            <GameCard
-              gameTitle={"Image 2"}
-              gameCategory={"Category 2"}
+            <MainCard
+              cardHeading={"Image 2"}
+              cardSubHeading={"Category 2"}
               cursor={"grab"}
               gameThumbnailLargeSrc={image.clickWarsBattleRoyal}
               gameThumbnailSmallSrc={image.clickWarsBattleRoyal}

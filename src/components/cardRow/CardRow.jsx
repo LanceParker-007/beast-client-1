@@ -1,48 +1,50 @@
-import { Box, HStack, Heading, Text } from "@chakra-ui/react";
+import { Box, Heading, Text } from "@chakra-ui/react";
 import React from "react";
-import GameCard from "../gameCard/GameCard";
+import MainCard from "../mainCard/MainCard";
 import { image } from "../../useAssets/useAssets";
 
-const GameCategoryRow = ({
-  rowHeading,
-  rowSubHeading,
-  gameTitle,
-  gameCategory,
+const CardRow = ({
+  rowHeading = "Discover top picks",
+  rowSubHeading = "Earn real cash by playing simple games",
+  cardHeading = "Drift Max Pro Car Racing Game",
+  cardSubHeading = "Racing",
 }) => {
   return (
-    <Box className="gameCategoryRow" h={"400px"} mb={14}>
+    <Box className="cardRow" mb={14}>
       <Box w={"100%"} height={"14%"} px={"3vw"} mb={[1, 5]}>
         <Heading fontSize={"x-large"} color={"#202124"}>
-          Discover top picks
+          {rowHeading}
         </Heading>
-        <Text color={"#5F6368"}>Earn real cash by playing simple games</Text>
+        <Text color={"#5F6368"}>{rowSubHeading}</Text>
       </Box>
       <Box w={"100%"} height={"86%"}>
-        <HStack
+        <Box
           minH={"40vh"}
           w={"100%"}
           overflowX={"auto"}
           px={"3vw"}
           justifyContent={"space-between"}
+          display={"flex"}
+          flexDirection={["column", "row"]}
           css={{ "&::-webkit-scrollbar": { height: "8px" } }}
         >
-          <GameCard
-            gameTitle={"Drift Max Pro Car Racing Game"}
-            gameCategory={"Racing"}
+          <MainCard
+            cardHeading={cardHeading}
+            cardSubHeading={cardSubHeading}
             gameThumbnailLargeSrc={image.clickWar}
             gameThumbnailSmallSrc={image.clickWar}
             cardLink="/games/click-war"
           />
 
-          <GameCard
-            gameTitle={"Drift Max Pro Car Racing Game"}
-            gameCategory={"Racing"}
+          <MainCard
+            cardHeading={cardHeading}
+            cardSubHeading={cardSubHeading}
             gameThumbnailLargeSrc={image.clickWarsBattleRoyal}
             gameThumbnailSmallSrc={image.clickWarsBattleRoyal}
           />
-          <GameCard
-            gameTitle={"Drift Max Pro Car Racing Game"}
-            gameCategory={"Racing"}
+          <MainCard
+            cardHeading={cardHeading}
+            cardSubHeading={cardSubHeading}
             gameThumbnailLargeSrc={image.clickWarsFight}
             gameThumbnailSmallSrc={image.clickWarsFight}
           />
@@ -57,10 +59,10 @@ const GameCategoryRow = ({
           >
             more coming soon...
           </Text>
-        </HStack>
+        </Box>
       </Box>
     </Box>
   );
 };
 
-export default GameCategoryRow;
+export default CardRow;

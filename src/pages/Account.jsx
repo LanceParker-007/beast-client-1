@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import gokuImg from "../assets/images/goku1.jpeg";
 import React from "react";
-import GameCategoryRow from "../components/gameCategoryRow/GameCategoryRow";
+import CardRow from "../components/cardRow/CardRow";
 
 const Account = () => {
   return (
@@ -60,7 +60,7 @@ const Account = () => {
       </Box>
 
       {/* Second section */}
-      <Box>
+      <Box height={"100%"}>
         <Tabs isFitted variant="enclosed">
           <TabList>
             <Tab>Submit Activities</Tab>
@@ -68,10 +68,10 @@ const Account = () => {
           </TabList>
           <TabPanels>
             <TabPanel>
-              <GameCategoryRow />
+              <CardRow ti />
             </TabPanel>
             <TabPanel>
-              <GameCategoryRow />
+              <CardRow />
             </TabPanel>
           </TabPanels>
         </Tabs>
