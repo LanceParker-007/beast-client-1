@@ -1,4 +1,4 @@
-import { Box, Heading, Text } from "@chakra-ui/react";
+import { Box, HStack, Heading, Text } from "@chakra-ui/react";
 import React from "react";
 import MainCard from "../mainCard/MainCard";
 import { image } from "../../useAssets/useAssets";
@@ -18,14 +18,12 @@ const CardRow = ({
         <Text color={"#5F6368"}>{rowSubHeading}</Text>
       </Box>
       <Box w={"100%"} height={"86%"}>
-        <Box
+        <HStack
           minH={"40vh"}
           w={"100%"}
           overflowX={"auto"}
           px={"3vw"}
           justifyContent={"space-between"}
-          display={"flex"}
-          flexDirection={["column", "row"]}
           css={{ "&::-webkit-scrollbar": { height: "8px" } }}
         >
           <MainCard
@@ -59,7 +57,7 @@ const CardRow = ({
           >
             more coming soon...
           </Text>
-        </Box>
+        </HStack>
       </Box>
     </Box>
   );
