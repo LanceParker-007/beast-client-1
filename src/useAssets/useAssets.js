@@ -7,9 +7,13 @@ const clickWar =
 const oneVsOneClick =
   "https://res.cloudinary.com/dk2fcl7bi/image/upload/v1705338805/playbrutal-games-thumbnails/oneVsOneClick_lxq1e3.jpg";
 
+const demoProfilePic =
+  "https://res.cloudinary.com/dk2fcl7bi/image/upload/v1693705741/yzi1hbg66pfzharnblnq.jpg";
+
 export const image = {
   clickWarsFight,
   clickWarsBattleRoyal,
   clickWar,
   oneVsOneClick,
+  demoProfilePic,
 };

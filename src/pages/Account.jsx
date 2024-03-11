@@ -8,9 +8,9 @@ import {
   TabPanels,
   Tabs,
 } from "@chakra-ui/react";
-import gokuImg from "../assets/images/goku1.jpeg";
 import React from "react";
 import CardRow from "../components/cardRow/CardRow";
+import { image } from "../useAssets/useAssets";
 
 const Account = () => {
   return (
@@ -38,7 +38,7 @@ const Account = () => {
           alignItems={"center"}
         >
           <Avatar
-            src={gokuImg}
+            src={image.demoProfilePic}
             alt="profile image"
             height={"190px"}
             width={"190px"}

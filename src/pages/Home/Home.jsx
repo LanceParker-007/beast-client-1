@@ -3,7 +3,7 @@ import "./Home.css";
 import "./Home.scss";
 import { Link } from "react-router-dom";
 import { HStack } from "@chakra-ui/react";
-import MainCard from "../../components/gameCard/MainCard";
+import MainCard from "../../components/mainCard/MainCard.jsx";
 import features from "./FeaturesCardsDetails.js";
 import FeaturesCard from "./FeaturesCard";
 import { image } from "../../useAssets/useAssets.js";
