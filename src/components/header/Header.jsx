@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, HStack, Heading, useDisclosure } from "@chakra-ui/react";
 import { RiAccountCircleFill, RiMenu5Fill } from "react-icons/ri";
-import Navbar from "../drawer/Drawer";
+import Navbar from "../navbar/Navbar";
 import { Link, useNavigate } from "react-router-dom";
 
 const Header = () => {
