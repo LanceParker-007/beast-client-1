@@ -1,9 +1,9 @@
-import { AttachmentIcon } from "@chakra-ui/icons";
 import {
   Alert,
   AlertIcon,
   Box,
   Button,
+  Img,
   Input,
   Text,
   useToast,
@@ -15,7 +15,21 @@ const TestIntegration = () => {
   const [zipfile, setZipFile] = useState(null);
   const [zipfileName, setZipFileName] = useState("");
   const [showGame, setShowGame] = useState(false);
+  const [toggleFullScreen, setToggleFullScreen] = useState(false);
+
   const toast = useToast();
+
+  const handleToggleFullScreen = (e) => {
+    const gameSectionWindow = document.getElementById("gameSectionWindow");
+    console.log(gameSectionWindow);
+    if (!toggleFullScreen) {
+      gameSectionWindow?.requestFullscreen();
+      setToggleFullScreen(true);
+    } else {
+      document.exitFullscreen();
+      setToggleFullScreen(false);
+    }
+  };
 
   const initiateFileUpload = () => {
     const fileUploadInputTag = document.getElementById("gameZipFile");
@@ -95,7 +109,14 @@ const TestIntegration = () => {
             fontFamily={"DM Mono, monospace"}
             padding={"0 1px"}
           >
-            <AttachmentIcon margin={"0 6px 0 -10px"} />
+            <Img
+              width="6"
+              height="6"
+              src="https://img.icons8.com/sf-regular/48/upload.png"
+              alt="upload"
+              margin={"0 4px 0 -6px"}
+            />
+
             {zipfileName
               ? `${zipfileName} uploaded`
               : "Upload your Webgl Build"}
@@ -133,12 +154,15 @@ const TestIntegration = () => {
       <Box height={"100%"} width={"100%"} padding={"1rem"}>
         {/* Game will be visible here */}
         <Box
+          id="gameSectionWindow"
           height={"70vh"}
           borderRadius={"6px"}
           display={"flex"}
           justifyContent={"center"}
           alignItems={"center"}
           boxShadow={"0 0 6px 1px black"}
+          position={"relative"}
+          bgColor={"white"}
         >
           {showGame ? (
             <UnityGame />
@@ -159,6 +183,25 @@ const TestIntegration = () => {
             >
               Start Game
             </Button>
+          )}
+          {/* Gofull screen box */}
+          {zipfile ? (
+            <Box
+              onClick={(e) => handleToggleFullScreen(e)}
+              cursor={"pointer"}
+              position={"absolute"}
+              bottom={"0.6rem"}
+              right={"0.6rem"}
+            >
+              <img
+                width="24"
+                height="24"
+                src="https://img.icons8.com/material-outlined/24/full-screen--v1.png"
+                alt="full-screen--v1"
+              />
+            </Box>
+          ) : (
+            <></>
           )}
         </Box>
         {/* Game success messages will be seen here */}
