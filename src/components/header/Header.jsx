@@ -72,7 +72,7 @@ const Header = () => {
             height={"12"}
             rounded={"full"}
             onClick={() => {
-              navigate("/manage-account");
+              navigate("/account");
             }}
             margin={"4px"}
             _hover={{

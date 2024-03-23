@@ -3,11 +3,13 @@ import React from "react";
 import MainCard from "../mainCard/MainCard";
 import { image } from "../../useAssets/useAssets";
 
+const cardHeading = "Drift Max Pro Car Racing Game";
+const cardSubHeading = "Racing";
+
 const CardRow = ({
   rowHeading = "Discover top picks",
   rowSubHeading = "Earn real cash by playing simple games",
-  cardHeading = "Drift Max Pro Car Racing Game",
-  cardSubHeading = "Racing",
+  cardsArray = new Array(3).fill(null) || [1, 2, 3],
 }) => {
   return (
     <Box className="cardRow" mb={14}>
@@ -26,26 +28,16 @@ const CardRow = ({
           justifyContent={"space-between"}
           css={{ "&::-webkit-scrollbar": { height: "8px" } }}
         >
-          <MainCard
-            cardHeading={cardHeading}
-            cardSubHeading={cardSubHeading}
-            gameThumbnailLargeSrc={image.clickWar}
-            gameThumbnailSmallSrc={image.clickWar}
-            cardLink="/games/click-war"
-          />
-
-          <MainCard
-            cardHeading={cardHeading}
-            cardSubHeading={cardSubHeading}
-            gameThumbnailLargeSrc={image.clickWarsBattleRoyal}
-            gameThumbnailSmallSrc={image.clickWarsBattleRoyal}
-          />
-          <MainCard
-            cardHeading={cardHeading}
-            cardSubHeading={cardSubHeading}
-            gameThumbnailLargeSrc={image.clickWarsFight}
-            gameThumbnailSmallSrc={image.clickWarsFight}
-          />
+          {cardsArray.map((_, index) => (
+            <MainCard
+              key={index}
+              cardHeading={cardHeading}
+              cardSubHeading={cardSubHeading}
+              gameThumbnailLargeSrc={image.clickWar}
+              gameThumbnailSmallSrc={image.clickWar}
+              cardLink="/games/click-war"
+            />
+          ))}
           <Text
             _hover={{
               backgroundColor: "#F5F5F5",

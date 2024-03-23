@@ -2,7 +2,6 @@ import React from "react";
 import "./signInWithGoogleButton.scss";
 import { useToast } from "@chakra-ui/react";
 import { devServer } from "../..";
-import axios from "axios";
 
 const SignInWithGoogleButton = ({ ...props }) => {
   const toast = useToast();

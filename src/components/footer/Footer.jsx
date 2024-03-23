@@ -14,7 +14,7 @@ const Footer = () => {
       minHeight={"60vh"}
       width={"100%"}
       color={"#5F6368"}
-      marginTop={["16rem", "12rem"]}
+      marginTop={["1.6rem", "1.2rem"]}
     >
       <Box
         m={"6vh 3vw"}
@@ -53,7 +53,7 @@ const Footer = () => {
           <Text fontSize={"1rem"} fontWeight={400}>
             @PlayBrutal
           </Text>
-          <Text
+          <Box
             display={"flex"}
             alignItems={"center"}
             fontSize={"1rem"}
@@ -69,7 +69,7 @@ const Footer = () => {
               />
             </Box>
             India (English (United States))
-          </Text>
+          </Box>
         </VStack>
 
         <HStack color={"blackalpha.900"} fontSize={50} p={0}>

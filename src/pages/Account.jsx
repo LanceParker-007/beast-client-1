@@ -46,13 +46,13 @@ const Account = () => {
         </Box>
         <Box
           minHeight={"200px"}
-          width={{ base: "100%", md: "40%", lg: "20%" }}
+          width={{ base: "100%", sm: "60%", md: "40%", lg: "20%" }}
           padding={11}
           display={{ base: "flex", md: "", lg: "" }}
           flexDirection={"column"}
           gap={11}
         >
-          <Button>Firstname Lastname</Button>
+          <Button width={{ sm: "", md: "", lg: "" }}>Firstname Lastname</Button>
           <Button>Edit Profile</Button>
           <Button>Help and Support</Button>
           <Button>Schedule a Stream</Button>
@@ -60,7 +60,7 @@ const Account = () => {
       </Box>
 
       {/* Second section */}
-      <Box height={"100%"}>
+      <Box>
         <Tabs isFitted variant="enclosed">
           <TabList>
             <Tab>Submit Activities</Tab>
@@ -68,10 +68,16 @@ const Account = () => {
           </TabList>
           <TabPanels>
             <TabPanel>
-              <CardRow ti />
+              <CardRow
+                rowHeading="Your activities"
+                rowSubHeading="Your submitted activities"
+              />
             </TabPanel>
             <TabPanel>
-              <CardRow />
+              <CardRow
+                rowHeading="Your streams"
+                rowSubHeading="Your created streams"
+              />
             </TabPanel>
           </TabPanels>
         </Tabs>
