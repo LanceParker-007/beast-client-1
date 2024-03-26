@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import "./App.scss";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
@@ -7,6 +7,10 @@ import Home from "./pages/Home/Home";
 import ContactUs from "./pages/ContactUs";
 import Docs from "./pages/Docs";
 import TestIntegration from "./pages/TestIntegration";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import Cookies from "js-cookie";
+import { setUser } from "./redux/slices/authSlice";
 // import AllGames from "./pages/AllGames";
 // import About from "./pages/About";
 // import Privacy from "./pages/Privacy";
@@ -16,6 +20,22 @@ import TestIntegration from "./pages/TestIntegration";
 // import Account from "./pages/Account";
 
 function App() {
+  const { user } = useSelector((state) => state.authSliceReducer);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const userInfo = Cookies.get("userInfo");
+
+    if (userInfo) {
+      dispatch(setUser(JSON.parse(userInfo)));
+    } else {
+      setUser(null);
+      navigate("/");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <>
       <Header />
@@ -23,7 +43,10 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/docs" element={<Docs />} />
-          <Route path="/test-your-game" element={<TestIntegration />} />
+          <Route
+            path="/test-your-game"
+            element={<TestIntegration user={user} />}
+          />
           {/* <Route path="/games" element={<AllGames />} /> */}
           {/* <Route path="/games/:gameId" element={<GameScreen />} /> */}
           {/* <Route path="/games/click-war" element={<GameScreen />} /> */}
