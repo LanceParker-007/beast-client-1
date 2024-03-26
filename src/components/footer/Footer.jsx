@@ -28,7 +28,7 @@ const Footer = () => {
         gap={10}
         alignItems={"flex-start"}
       >
-        <VStack alignItems={"flex-start"}>
+        {/* <VStack alignItems={"flex-start"}>
           <Text fontSize={"1.2rem"} fontWeight={500} fontFamily={"Jockey One"}>
             PlayBrutal
           </Text>
@@ -44,7 +44,7 @@ const Footer = () => {
           <Link to={"/developers"} fontSize={".875rem"} fontWeight={400}>
             Developers
           </Link>
-        </VStack>
+        </VStack> */}
 
         <VStack alignItems={"flex-start"} width={"full"}>
           <Text fontSize={"1.2rem"} fontWeight={500}>
@@ -72,7 +72,7 @@ const Footer = () => {
           </Box>
         </VStack>
 
-        <HStack color={"blackalpha.900"} fontSize={50} p={0}>
+        {/* <HStack color={"blackalpha.900"} fontSize={50} p={0}>
           <ChakraLink
             href="https://www.youtube.com/"
             target="_blank"
@@ -93,7 +93,7 @@ const Footer = () => {
           >
             <TiSocialInstagramCircular />
           </ChakraLink>
-        </HStack>
+        </HStack> */}
       </VStack>
     </Box>
   );

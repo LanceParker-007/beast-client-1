@@ -8,12 +8,28 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import UnityGame from "../components/unityGame/UnityGame";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setBuildFolder,
+  setDataFile,
+  setFrameworkFile,
+  setLoaderFile,
+  setWasmFile,
+} from "../redux/slices/testGameSlice";
 
 const TestIntegration = () => {
-  const [zipfile, setZipFile] = useState(null);
-  const [zipfileName, setZipFileName] = useState("");
+  // To store file urls from we will get from s3
+  const { dataFile, frameworkFile, loaderFile, wasmFile, buildFolder } =
+    useSelector((state) => state.testGameSliceReducer);
+  const dispatch = useDispatch();
+
+  const [data, setData] = useState(null);
+  const [framework, setFramework] = useState(null);
+  const [loader, setLoader] = useState(null);
+  const [wasm, setWasm] = useState(null);
   const [showGame, setShowGame] = useState(false);
   const [toggleFullScreen, setToggleFullScreen] = useState(false);
 
@@ -32,29 +48,82 @@ const TestIntegration = () => {
   };
 
   const initiateFileUpload = () => {
-    const fileUploadInputTag = document.getElementById("gameZipFile");
+    const fileUploadInputTag = document.getElementById("gamebuildFolder");
     console.log(fileUploadInputTag);
     fileUploadInputTag.click();
   };
 
-  const handleZipFileUpload = (e) => {
-    console.log(e.target.files[0]);
-    const tempFile = e.target.files[0];
-    const fileReader = new FileReader();
+  const handlebuildFolderUpload = (e) => {
+    console.log(e.target.files);
+    const tempFiles = Array.from(e.target.files);
 
-    if (tempFile) {
-      fileReader.readAsDataURL(tempFile);
-      fileReader.onloadend = () => {
-        setZipFile(tempFile);
-      };
-      setZipFileName(tempFile.name);
-    }
+    console.log("48");
+
+    tempFiles.forEach((tempFile, index) => {
+      tempFile = e.target.files[index];
+      if (index === 0) {
+        setData(tempFile);
+      } else if (index === 1) {
+        setFramework(tempFile);
+      } else if (index === 2) {
+        setLoader(tempFile);
+      } else if (index === 3) {
+        setWasm(tempFile);
+      }
+    });
+
+    console.log("70");
+  };
+
+  const getPresignedUrl = async (fileInfo) => {
+    const { data } = await axios.post(
+      `http://localhost:5000/api/v1/user/get-presigned-url-for-test-game`,
+      {
+        username: "Harsh",
+        gamename: `Game3`,
+        filename: fileInfo.name,
+        fileType: fileInfo.type,
+      }
+    );
+
+    return data;
+  };
+
+  const getPresignedUrlUploadToS3SaveFileInfoToDB = async (file) => {
+    // Step1: getPresignedUrl
+    const preSignedUrlData = await getPresignedUrl(file);
+    console.log(preSignedUrlData);
+
+    // Step2: UploadFileToS3
+    const { data } = await axios.put(`${preSignedUrlData.signedURL}`, file, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    // console.log(data);
+    const url = preSignedUrlData.signedURL.split("?")[0];
+    const public_id = preSignedUrlData.public_id;
+
+    // Step3: Save file info to Db and then in slice object
+    console.log(file.name, url);
+    console.log(public_id);
   };
 
   const handleStartGame = () => {
     console.log("Start Game");
     setShowGame(true);
   };
+
+  useEffect(() => {
+    if (data && framework && loader && wasm) {
+      getPresignedUrlUploadToS3SaveFileInfoToDB(data);
+      getPresignedUrlUploadToS3SaveFileInfoToDB(framework);
+      getPresignedUrlUploadToS3SaveFileInfoToDB(loader);
+      getPresignedUrlUploadToS3SaveFileInfoToDB(wasm);
+      dispatch(setBuildFolder(true));
+    }
+  }, [data, framework, loader, wasm]);
 
   return (
     <Box
@@ -76,10 +145,12 @@ const TestIntegration = () => {
       >
         <Input
           type="file"
-          id="gameZipFile"
+          id="gamebuildFolder"
           hidden
-          accept={".zip,.rar,.7zip"}
-          onChange={(e) => handleZipFileUpload(e)}
+          webkitdirectory={"true"}
+          mozdirectory={"true"}
+          directory=""
+          onChange={(e) => handlebuildFolderUpload(e)}
         />
         <Box
           height={"130px"}
@@ -93,7 +164,7 @@ const TestIntegration = () => {
           alignItems={"center"}
           marginTop={["1rem", "10rem"]}
           marginBottom={"1rem"}
-          onClick={!zipfile ? () => initiateFileUpload() : () => {}}
+          onClick={!buildFolder ? () => initiateFileUpload() : () => {}}
         >
           <Box
             bgColor={"white"}
@@ -117,16 +188,13 @@ const TestIntegration = () => {
               margin={"0 4px 0 -6px"}
             />
 
-            {zipfileName
-              ? `${zipfileName} uploaded`
-              : "Upload your Webgl Build"}
+            {buildFolder
+              ? `All files correct`
+              : "Upload your Webgl Build Folder"}
           </Box>
-          <Text fontSize={"12px"} color={"#a3a3a3"}>
-            Files Supported: Zip
-          </Text>
         </Box>
 
-        {zipfile ? (
+        {buildFolder ? (
           <Box
             width={"100%"}
             padding={["0 1.5rem", "0 1rem"]}
@@ -165,12 +233,17 @@ const TestIntegration = () => {
           bgColor={"white"}
         >
           {showGame ? (
-            <UnityGame />
+            <UnityGame
+              dataFile={dataFile}
+              frameworkFile={frameworkFile}
+              loaderFile={loaderFile}
+              wasmFile={wasmFile}
+            />
           ) : (
             <Button
-              disabled={zipfile ? false : true}
+              disabled={buildFolder ? false : true}
               onClick={
-                zipfile
+                buildFolder
                   ? handleStartGame
                   : () =>
                       toast({
@@ -185,7 +258,7 @@ const TestIntegration = () => {
             </Button>
           )}
           {/* Gofull screen box */}
-          {zipfile ? (
+          {buildFolder ? (
             <Box
               onClick={(e) => handleToggleFullScreen(e)}
               cursor={"pointer"}

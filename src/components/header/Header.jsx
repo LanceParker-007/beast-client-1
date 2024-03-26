@@ -65,7 +65,7 @@ const Header = () => {
           >
             <RiMenu5Fill size={"24vh"} />
           </Button>
-          <Button
+          {/* <Button
             bg={isScrolled ? "#FBFBFF" : "black"}
             color={isScrolled ? "black" : "white"}
             width={"12"}
@@ -81,7 +81,7 @@ const Header = () => {
             }}
           >
             <RiAccountCircleFill />
-          </Button>
+          </Button> */}
         </HStack>
       </HStack>
 

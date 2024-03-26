@@ -32,7 +32,7 @@ const LinkButton = ({ url = "/", title = "Home", onClose }) => {
 
 const Navbar = ({ user = null, isOpen, onClose }) => {
   return (
-    <Drawer placement="left" onClose={onClose} isOpen={isOpen}>
+    <Drawer placement="right" onClose={onClose} isOpen={isOpen}>
       <DrawerOverlay />
       <DrawerContent>
         <DrawerHeader borderBottomWidth={"1px"}>PlayBrutal</DrawerHeader>
