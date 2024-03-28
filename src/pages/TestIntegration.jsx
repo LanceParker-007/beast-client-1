@@ -1,13 +1,5 @@
-import {
-  Alert,
-  AlertIcon,
-  Box,
-  Button,
-  Img,
-  Input,
-  Text,
-  useToast,
-} from "@chakra-ui/react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { Box, Button, Img, Input, useToast } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import UnityGame from "../components/unityGame/UnityGame";
 import axios from "axios";
@@ -19,13 +11,18 @@ import {
   setLoaderFile,
   setWasmFile,
 } from "../redux/slices/testGameSlice";
+import { useNavigate } from "react-router-dom";
+import { DeleteIcon } from "@chakra-ui/icons";
+import { devServer } from "../index";
 
-const TestIntegration = () => {
+const TestIntegration = ({ user }) => {
   // To store file urls from we will get from s3
   const { dataFile, frameworkFile, loaderFile, wasmFile, buildFolder } =
     useSelector((state) => state.testGameSliceReducer);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
+  const [gamename, setGamename] = useState("");
   const [data, setData] = useState(null);
   const [framework, setFramework] = useState(null);
   const [loader, setLoader] = useState(null);
@@ -35,6 +32,7 @@ const TestIntegration = () => {
 
   const toast = useToast();
 
+  // Handle Toggle FullScreen
   const handleToggleFullScreen = (e) => {
     const gameSectionWindow = document.getElementById("gameSectionWindow");
     console.log(gameSectionWindow);
@@ -47,12 +45,24 @@ const TestIntegration = () => {
     }
   };
 
+  //Initiate Build Folder Uploading
   const initiateFileUpload = () => {
+    if (!gamename) {
+      toast({
+        title: `Give your build a name!`,
+        variant: "top-accent",
+        status: "warning",
+        isClosable: true,
+      });
+      return;
+    }
+
     const fileUploadInputTag = document.getElementById("gamebuildFolder");
     console.log(fileUploadInputTag);
     fileUploadInputTag.click();
   };
 
+  //Handle Build Folder Uploading
   const handlebuildFolderUpload = (e) => {
     console.log(e.target.files);
     const tempFiles = Array.from(e.target.files);
@@ -75,12 +85,13 @@ const TestIntegration = () => {
     console.log("70");
   };
 
+  // Get Presigned url from backend
   const getPresignedUrl = async (fileInfo) => {
     const { data } = await axios.post(
       `http://localhost:5000/api/v1/user/get-presigned-url-for-test-game`,
       {
-        username: "Harsh",
-        gamename: `Game3`,
+        username: user.username,
+        gamename: gamename,
         filename: fileInfo.name,
         fileType: fileInfo.type,
       }
@@ -89,27 +100,118 @@ const TestIntegration = () => {
     return data;
   };
 
-  const getPresignedUrlUploadToS3SaveFileInfoToDB = async (file) => {
+  // Intiate Presigned Url and uploading to s3
+  const getPresignedUrlUploadToS3 = async (file) => {
     // Step1: getPresignedUrl
     const preSignedUrlData = await getPresignedUrl(file);
     console.log(preSignedUrlData);
 
-    // Step2: UploadFileToS3
-    const { data } = await axios.put(`${preSignedUrlData.signedURL}`, file, {
+    const url = preSignedUrlData.signedURL.split("?")[0];
+    const public_id = preSignedUrlData.public_id;
+
+    // Step3: UploadFileToS3
+    const { res } = await axios.put(`${preSignedUrlData.signedURL}`, file, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     });
+    console.log(res);
 
-    // console.log(data);
-    const url = preSignedUrlData.signedURL.split("?")[0];
-    const public_id = preSignedUrlData.public_id;
-
-    // Step3: Save file info to Db and then in slice object
-    console.log(file.name, url);
-    console.log(public_id);
+    // Step2: Save file info redux store
+    if (file.name.includes("data")) {
+      await dispatch(
+        setDataFile({
+          filePublicId: public_id,
+          fileUrl: url,
+          key: `testing-builds/${user.username}/${gamename}/${public_id}`,
+        })
+      );
+    } else if (file.name.includes("framework")) {
+      await dispatch(
+        setFrameworkFile({
+          filePublicId: public_id,
+          fileUrl: url,
+          key: `testing-builds/${user.username}/${gamename}/${public_id}`,
+        })
+      );
+    } else if (file.name.includes("loader")) {
+      await dispatch(
+        setLoaderFile({
+          filePublicId: public_id,
+          fileUrl: url,
+          key: `$unity-games-test-bucket/
+          testing-builds/{user.username}/${gamename}/${public_id}`,
+        })
+      );
+    } else if (file.name.includes("wasm")) {
+      await dispatch(
+        setWasmFile({
+          filePublicId: public_id,
+          fileUrl: url,
+          key: `$unity-games-test-bucket/
+          testing-builds/{user.username}/${gamename}/${public_id}`,
+        })
+      );
+    }
   };
 
+  const saveFilesInfoToDB = async () => {
+    const { data } = await axios.post(
+      `http://localhost:5000/api/v1/user/save-test-game-details`,
+      {
+        dataFile: dataFile,
+        frameworkFile: frameworkFile,
+        loaderFile: loaderFile,
+        wasmFile: wasmFile,
+        gamename: gamename,
+        gameOwner: user._id,
+      }
+    );
+
+    if (data.success) {
+      toast({
+        title: data.message,
+        variant: "top-accent",
+        status: "success",
+        isClosable: true,
+      });
+    } else {
+      toast({
+        title: data.message,
+        variant: "top-accent",
+        status: "error",
+        isClosable: true,
+      });
+    }
+  };
+
+  // Remove a users all test builds
+  const handleDeleteMyBuilds = async () => {
+    const { data } = await axios.post(
+      `${devServer}/api/v1/user/remove-all-test-builds`,
+      {
+        gameOwner: user._id,
+      }
+    );
+
+    if (data.success) {
+      toast({
+        title: data.message,
+        variant: "top-accent",
+        status: "success",
+        isClosable: true,
+      });
+    } else {
+      toast({
+        title: data.message,
+        variant: "top-accent",
+        status: "error",
+        isClosable: true,
+      });
+    }
+  };
+
+  // Handle Start Game
   const handleStartGame = () => {
     console.log("Start Game");
     setShowGame(true);
@@ -117,13 +219,25 @@ const TestIntegration = () => {
 
   useEffect(() => {
     if (data && framework && loader && wasm) {
-      getPresignedUrlUploadToS3SaveFileInfoToDB(data);
-      getPresignedUrlUploadToS3SaveFileInfoToDB(framework);
-      getPresignedUrlUploadToS3SaveFileInfoToDB(loader);
-      getPresignedUrlUploadToS3SaveFileInfoToDB(wasm);
-      dispatch(setBuildFolder(true));
+      getPresignedUrlUploadToS3(data);
+      getPresignedUrlUploadToS3(framework);
+      getPresignedUrlUploadToS3(loader);
+      getPresignedUrlUploadToS3(wasm);
     }
   }, [data, framework, loader, wasm]);
+
+  useEffect(() => {
+    if (dataFile && frameworkFile && loaderFile && wasmFile) {
+      saveFilesInfoToDB();
+      dispatch(setBuildFolder(true));
+    }
+  }, [dataFile, frameworkFile, loaderFile, wasmFile]);
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/");
+    }
+  }, [user]);
 
   return (
     <Box
@@ -138,7 +252,7 @@ const TestIntegration = () => {
         display={"flex"}
         flexDirection={"column"}
         alignItems={"center"}
-        justifyContent={"space-between"}
+        justifyContent={["space-between", "center"]}
         padding={"1rem 0"}
         borderRight={"1px solid #f5f5f5"}
         borderRadius={"0 6px 0 0"}
@@ -152,6 +266,16 @@ const TestIntegration = () => {
           directory=""
           onChange={(e) => handlebuildFolderUpload(e)}
         />
+
+        <Input
+          value={gamename}
+          onChange={(e) => setGamename(e.target.value)}
+          required={true}
+          placeholder="Enter your game name"
+          padding={"0.1rem 0.6rem"}
+          margin={"0.1rem auto"}
+          width={{ sm: "70%", lg: "83%" }}
+        />
         <Box
           height={"130px"}
           width={["300px", "380"]}
@@ -162,7 +286,7 @@ const TestIntegration = () => {
           flexDirection={"column"}
           justifyContent={"center"}
           alignItems={"center"}
-          marginTop={["1rem", "10rem"]}
+          marginTop={["1rem"]}
           marginBottom={"1rem"}
           onClick={!buildFolder ? () => initiateFileUpload() : () => {}}
         >
@@ -194,29 +318,13 @@ const TestIntegration = () => {
           </Box>
         </Box>
 
-        {buildFolder ? (
-          <Box
-            width={"100%"}
-            padding={["0 1.5rem", "0 1rem"]}
-            display={"flex"}
-            flexDirection={{ sm: "column", lg: "row" }}
-            gap={{ md: "11px", lg: "0px" }}
-            justifyContent={"space-between"}
-            marginBottom={"1rem"}
-          >
-            <Button>Remove File</Button>
-            <Button>Change File</Button>
-          </Box>
-        ) : (
-          <></>
-        )}
-        <Box padding={["0 1.5rem", "0 1rem"]}>
-          <Alert status="success" variant="left-accent">
-            <AlertIcon />
-            Your game will be on our servers for the current browser session
-            only!
-          </Alert>
-        </Box>
+        <Button
+          leftIcon={<DeleteIcon />}
+          colorScheme="red"
+          onClick={handleDeleteMyBuilds}
+        >
+          Remove My All Builds
+        </Button>
       </Box>
       {/* Game Screen */}
       <Box height={"100%"} width={"100%"} padding={"1rem"}>
@@ -253,6 +361,7 @@ const TestIntegration = () => {
                         isClosable: true,
                       })
               }
+              colorScheme={buildFolder ? "green" : "red"}
             >
               Start Game
             </Button>

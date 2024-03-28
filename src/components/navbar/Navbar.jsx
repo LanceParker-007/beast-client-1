@@ -9,12 +9,8 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import React from "react";
-import { RiLogoutBoxLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import SignInWithGoogleButton from "../signInWithGoogleButton/SignInWithGoogleButton";
-import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "../../redux/slices/authSlice";
-import Cookies from "js-cookie";
 
 //Remember to DeStructure
 const LinkButton = ({ url = "/", title = "Home", onClose }) => {
@@ -34,14 +30,6 @@ const LinkButton = ({ url = "/", title = "Home", onClose }) => {
 };
 
 const Navbar = ({ isOpen, onClose }) => {
-  const { user } = useSelector((state) => state.authSliceReducer);
-  const dispatch = useDispatch();
-
-  const handleLogout = () => {
-    dispatch(setUser(null));
-    Cookies.remove("userInfo");
-  };
-
   return (
     <Drawer placement="right" onClose={onClose} isOpen={isOpen}>
       <DrawerOverlay />
@@ -69,18 +57,7 @@ const Navbar = ({ isOpen, onClose }) => {
             {/* <LinkButton onClose={onClose} url={"/#about-us"} title={"About"} /> */}
 
             <HStack justifyContent={"center"} mt={20} width={"100%"}>
-              {user ? (
-                <Button variant="ghost" onClick={handleLogout}>
-                  <RiLogoutBoxLine />
-                  Logout
-                </Button>
-              ) : (
-                <>
-                  <HStack>
-                    <SignInWithGoogleButton />
-                  </HStack>
-                </>
-              )}
+              <SignInWithGoogleButton />
             </HStack>
           </VStack>
         </DrawerBody>

@@ -26,7 +26,6 @@ function App() {
 
   useEffect(() => {
     const userInfo = Cookies.get("userInfo");
-
     if (userInfo) {
       dispatch(setUser(JSON.parse(userInfo)));
     } else {
@@ -56,6 +55,7 @@ function App() {
           {/* <Route path="/terms-of-service" element={<TermsAndConditions />} /> */}
           {/* <Route path="/privacy-policy" element={<Privacy />} /> */}
           {/* <Route path="/developers" element={<Developers />} /> */}
+          <Route path="/*" element={<Docs />} />
         </Routes>
       </Box>
       <Footer />

@@ -7,7 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const handleScroll = () => {
     const scrollPercentage = (window.scrollY / window.innerHeight) * 100;

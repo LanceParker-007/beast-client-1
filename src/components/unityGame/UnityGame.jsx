@@ -1,8 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Unity, useUnityContext } from "react-unity-webgl";
 
-const UnityGame = ({ dataFile, frameworkFile, loaderFile, wasmFile }) => {
+const UnityGame = () => {
+  const { dataFile, frameworkFile, loaderFile, wasmFile } = useSelector(
+    (state) => state.testGameSliceReducer
+  );
   const {
     sendMessage,
     addEventListener,
@@ -11,14 +15,10 @@ const UnityGame = ({ dataFile, frameworkFile, loaderFile, wasmFile }) => {
     loadingProgression,
     isLoaded,
   } = useUnityContext({
-    dataUrl:
-      "https://unity-games-test-bucket.s3.ap-south-1.amazonaws.com/testing-builds/Harsh/Game3/reactUnityDataTransfer.data%20-%201711430359506.",
-    frameworkUrl:
-      "https://unity-games-test-bucket.s3.ap-south-1.amazonaws.com/testing-builds/Harsh/Game3/reactUnityDataTransfer.framework.js%20-%201711430359633.text/javascript",
-    loaderUrl:
-      "https://unity-games-test-bucket.s3.ap-south-1.amazonaws.com/testing-builds/Harsh/Game3/reactUnityDataTransfer.loader.js%20-%201711430359648.text/javascript",
-    codeUrl:
-      "https://unity-games-test-bucket.s3.ap-south-1.amazonaws.com/testing-builds/Harsh/Game3/reactUnityDataTransfer.wasm%20-%201711430359644.application/wasm",
+    dataUrl: dataFile.fileUrl,
+    frameworkUrl: frameworkFile.fileUrl,
+    loaderUrl: loaderFile.fileUrl,
+    codeUrl: wasmFile.fileUrl,
     webglContextAttributes: {
       preserveDrawingBuffer: true,
     },
