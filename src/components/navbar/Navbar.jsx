@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { Link } from "react-router-dom";
-import SignInWithGoogleButton from "../signInWithGoogleButton/SignInWithGoogleButton";
+import SignInWithGoogleButton from "../signInWithGoogleButton/SignInWithGoogleButton.jsx";
 
 //Remember to DeStructure
 const LinkButton = ({ url = "/", title = "Home", onClose }) => {
