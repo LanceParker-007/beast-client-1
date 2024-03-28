@@ -186,30 +186,30 @@ const TestIntegration = ({ user }) => {
   };
 
   // Remove a users all test builds
-  const handleDeleteMyBuilds = async () => {
-    const { data } = await axios.post(
-      `${devServer}/api/v1/user/remove-all-test-builds`,
-      {
-        gameOwner: user._id,
-      }
-    );
+  // const handleDeleteMyBuilds = async () => {
+  //   const { data } = await axios.post(
+  //     `${devServer}/api/v1/user/remove-all-test-builds`,
+  //     {
+  //       gameOwner: user._id,
+  //     }
+  //   );
 
-    if (data.success) {
-      toast({
-        title: data.message,
-        variant: "top-accent",
-        status: "success",
-        isClosable: true,
-      });
-    } else {
-      toast({
-        title: data.message,
-        variant: "top-accent",
-        status: "error",
-        isClosable: true,
-      });
-    }
-  };
+  //   if (data.success) {
+  //     toast({
+  //       title: data.message,
+  //       variant: "top-accent",
+  //       status: "success",
+  //       isClosable: true,
+  //     });
+  //   } else {
+  //     toast({
+  //       title: data.message,
+  //       variant: "top-accent",
+  //       status: "error",
+  //       isClosable: true,
+  //     });
+  //   }
+  // };
 
   // Handle Start Game
   const handleStartGame = () => {
@@ -318,13 +318,13 @@ const TestIntegration = ({ user }) => {
           </Box>
         </Box>
 
-        <Button
+        {/* <Button
           leftIcon={<DeleteIcon />}
           colorScheme="red"
           onClick={handleDeleteMyBuilds}
         >
           Remove My All Builds
-        </Button>
+        </Button> */}
       </Box>
       {/* Game Screen */}
       <Box height={"100%"} width={"100%"} padding={"1rem"}>
