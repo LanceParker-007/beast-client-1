@@ -17,7 +17,6 @@ import Cookies from "js-cookie";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
-import { devServer } from "../../index";
 import { RiLogoutBoxLine } from "react-icons/ri";
 // import SignInWithGoogleButton from "../signInWithGoogleButton/SignInWithGoogleButton.jsx";
 
@@ -43,6 +42,7 @@ const SignInWithGoogleButton = ({ ...props }) => {
         const email = credentialResponseDecoded.email;
         const pic = credentialResponseDecoded.picture;
 
+        console.log(username);
         try {
           const config = {
             headers: {
@@ -51,7 +51,7 @@ const SignInWithGoogleButton = ({ ...props }) => {
           };
 
           const { data } = await axios.post(
-            `${devServer}/api/v1/user/signin-with-google`,
+            `${process.env.REACT_APP_SERVER}/api/v1/user/signin-with-google`,
             { username, email, pic },
             config
           );

@@ -8,14 +8,13 @@ import { Provider } from "react-redux";
 import store from "./redux/store/store";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
-export const devServer = "http://localhost:5000";
-export const prodServer = "";
-
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
     <ChakraProvider>
-      <GoogleOAuthProvider clientId="329490772517-6ev48t90ct0na2to2aoortrbp07rh3nm.apps.googleusercontent.com">
+      <GoogleOAuthProvider
+        clientId={process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID}
+      >
         <Provider store={store}>
           <App />
         </Provider>

@@ -13,7 +13,6 @@ import {
 } from "../redux/slices/testGameSlice";
 import { useNavigate } from "react-router-dom";
 import { DeleteIcon } from "@chakra-ui/icons";
-import { devServer } from "../index";
 
 const TestIntegration = ({ user }) => {
   // To store file urls from we will get from s3
@@ -88,7 +87,7 @@ const TestIntegration = ({ user }) => {
   // Get Presigned url from backend
   const getPresignedUrl = async (fileInfo) => {
     const { data } = await axios.post(
-      `http://localhost:5000/api/v1/user/get-presigned-url-for-test-game`,
+      `${process.env.React_APP_SERVER}/api/v1/user/get-presigned-url-for-test-game`,
       {
         username: user.username,
         gamename: gamename,
@@ -157,7 +156,7 @@ const TestIntegration = ({ user }) => {
 
   const saveFilesInfoToDB = async () => {
     const { data } = await axios.post(
-      `http://localhost:5000/api/v1/user/save-test-game-details`,
+      `${process.env.React_APP_SERVER}/api/v1/user/save-test-game-details`,
       {
         dataFile: dataFile,
         frameworkFile: frameworkFile,
@@ -186,30 +185,30 @@ const TestIntegration = ({ user }) => {
   };
 
   // Remove a users all test builds
-  // const handleDeleteMyBuilds = async () => {
-  //   const { data } = await axios.post(
-  //     `${devServer}/api/v1/user/remove-all-test-builds`,
-  //     {
-  //       gameOwner: user._id,
-  //     }
-  //   );
+  const handleDeleteMyBuilds = async () => {
+    const { data } = await axios.post(
+      `${process.env.React_APP_SERVER}/api/v1/user/remove-all-test-builds`,
+      {
+        gameOwner: user._id,
+      }
+    );
 
-  //   if (data.success) {
-  //     toast({
-  //       title: data.message,
-  //       variant: "top-accent",
-  //       status: "success",
-  //       isClosable: true,
-  //     });
-  //   } else {
-  //     toast({
-  //       title: data.message,
-  //       variant: "top-accent",
-  //       status: "error",
-  //       isClosable: true,
-  //     });
-  //   }
-  // };
+    if (data.success) {
+      toast({
+        title: data.message,
+        variant: "top-accent",
+        status: "success",
+        isClosable: true,
+      });
+    } else {
+      toast({
+        title: data.message,
+        variant: "top-accent",
+        status: "error",
+        isClosable: true,
+      });
+    }
+  };
 
   // Handle Start Game
   const handleStartGame = () => {
@@ -318,13 +317,13 @@ const TestIntegration = ({ user }) => {
           </Box>
         </Box>
 
-        {/* <Button
+        <Button
           leftIcon={<DeleteIcon />}
           colorScheme="red"
           onClick={handleDeleteMyBuilds}
         >
           Remove My All Builds
-        </Button> */}
+        </Button>
       </Box>
       {/* Game Screen */}
       <Box height={"100%"} width={"100%"} padding={"1rem"}>
