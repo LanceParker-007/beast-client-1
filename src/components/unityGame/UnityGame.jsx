@@ -57,7 +57,7 @@ const UnityGame = () => {
   ]);
 
   useEffect(() => {
-    sendMessage("GameController", "LobbyCodeFromBrowser", "12345");
+    sendMessage("GameController", "LobbyCodeFromBrowser", "Qwerty");
   });
 
   useEffect(() => {
