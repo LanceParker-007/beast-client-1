@@ -42,7 +42,6 @@ const SignInWithGoogleButton = ({ ...props }) => {
         const email = credentialResponseDecoded.email;
         const pic = credentialResponseDecoded.picture;
 
-        console.log(username);
         try {
           const config = {
             headers: {
