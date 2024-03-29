@@ -87,7 +87,7 @@ const TestIntegration = ({ user }) => {
   // Get Presigned url from backend
   const getPresignedUrl = async (fileInfo) => {
     const { data } = await axios.post(
-      `${process.env.React_APP_SERVER}/api/v1/user/get-presigned-url-for-test-game`,
+      `${process.env.REACT_APP_SERVER}/api/v1/user/get-presigned-url-for-test-game`,
       {
         username: user.username,
         gamename: gamename,
@@ -156,7 +156,7 @@ const TestIntegration = ({ user }) => {
 
   const saveFilesInfoToDB = async () => {
     const { data } = await axios.post(
-      `${process.env.React_APP_SERVER}/api/v1/user/save-test-game-details`,
+      `${process.env.REACT_APP_SERVER}/api/v1/user/save-test-game-details`,
       {
         dataFile: dataFile,
         frameworkFile: frameworkFile,
@@ -187,7 +187,7 @@ const TestIntegration = ({ user }) => {
   // Remove a users all test builds
   const handleDeleteMyBuilds = async () => {
     const { data } = await axios.post(
-      `${process.env.React_APP_SERVER}/api/v1/user/remove-all-test-builds`,
+      `${process.env.REACT_APP_SERVER}/api/v1/user/remove-all-test-builds`,
       {
         gameOwner: user._id,
       }
