@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Unity, useUnityContext } from "react-unity-webgl";
+import { setMessageFromUnity } from "../../redux/slices/testGameSlice";
 
 const UnityGame = () => {
   const { dataFile, frameworkFile, loaderFile, wasmFile } = useSelector(
@@ -24,11 +25,13 @@ const UnityGame = () => {
     },
   });
 
+  const dispatch = useDispatch();
   const [lobbyCode, setLobbyCode] = useState("");
   const [userGameId, setUserGameId] = useState("");
 
   window.ReceiveMessageFromUnity = (message) => {
     console.log("Received message from Unity:", message);
+    dispatch(setMessageFromUnity(message));
   };
 
   const handleUserGameID = useCallback((userId) => {

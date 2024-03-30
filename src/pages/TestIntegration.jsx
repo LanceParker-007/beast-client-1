@@ -16,8 +16,14 @@ import { DeleteIcon } from "@chakra-ui/icons";
 
 const TestIntegration = ({ user }) => {
   // To store file urls from we will get from s3
-  const { dataFile, frameworkFile, loaderFile, wasmFile, buildFolder } =
-    useSelector((state) => state.testGameSliceReducer);
+  const {
+    dataFile,
+    frameworkFile,
+    loaderFile,
+    wasmFile,
+    buildFolder,
+    messageFromUnity,
+  } = useSelector((state) => state.testGameSliceReducer);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -28,6 +34,8 @@ const TestIntegration = ({ user }) => {
   const [wasm, setWasm] = useState(null);
   const [showGame, setShowGame] = useState(false);
   const [toggleFullScreen, setToggleFullScreen] = useState(false);
+
+  const [messagesFromUnity, setMessagesFromUnity] = useState([]);
 
   const toast = useToast();
 
@@ -215,6 +223,11 @@ const TestIntegration = ({ user }) => {
     console.log("Start Game");
     setShowGame(true);
   };
+  // Handle Stop Game
+  const handleStopGame = () => {
+    console.log("Stop Game");
+    setShowGame(false);
+  };
 
   useEffect(() => {
     if (data && framework && loader && wasm) {
@@ -237,6 +250,10 @@ const TestIntegration = ({ user }) => {
       navigate("/");
     }
   }, [user]);
+
+  useState(() => {
+    setMessagesFromUnity(() => [...messagesFromUnity, messageFromUnity]);
+  }, [messageFromUnity]);
 
   return (
     <Box
@@ -347,23 +364,7 @@ const TestIntegration = ({ user }) => {
               wasmFile={wasmFile}
             />
           ) : (
-            <Button
-              disabled={buildFolder ? false : true}
-              onClick={
-                buildFolder
-                  ? handleStartGame
-                  : () =>
-                      toast({
-                        title: `Upload your build file`,
-                        variant: "top-accent",
-                        status: "warning",
-                        isClosable: true,
-                      })
-              }
-              colorScheme={buildFolder ? "green" : "red"}
-            >
-              Start Game
-            </Button>
+            <></>
           )}
           {/* Gofull screen box */}
           {buildFolder ? (
@@ -385,6 +386,44 @@ const TestIntegration = ({ user }) => {
             <></>
           )}
         </Box>
+        {/* Start, Stop, Restart game */}
+        <Box display={"flex"} justifyContent={"center"} gap={11} padding={1}>
+          <Button
+            disabled={buildFolder ? false : true}
+            onClick={
+              buildFolder
+                ? handleStartGame
+                : () =>
+                    toast({
+                      title: `Upload your build folder first`,
+                      variant: "top-accent",
+                      status: "warning",
+                      isClosable: true,
+                    })
+            }
+            colorScheme={buildFolder ? "green" : "red"}
+          >
+            Start Game
+          </Button>
+
+          <Button
+            disabled={buildFolder ? false : true}
+            onClick={
+              buildFolder
+                ? handleStopGame
+                : () =>
+                    toast({
+                      title: `Upload your build folder first`,
+                      variant: "top-accent",
+                      status: "warning",
+                      isClosable: true,
+                    })
+            }
+            colorScheme={buildFolder ? "green" : "red"}
+          >
+            Stop Game
+          </Button>
+        </Box>
         {/* Game success messages will be seen here */}
         <Box
           height={"20vh"}
@@ -393,7 +432,14 @@ const TestIntegration = ({ user }) => {
           padding={"1rem"}
           boxShadow={"0 0 6px 1px black"}
         >
-          Successfully connected messages!
+          {messagesFromUnity.map((msg, index) => (
+            <Input
+              key={index}
+              placeholder="You can see messags from unity here on successfull integration."
+              value={msg}
+              readOnly={true}
+            ></Input>
+          ))}
         </Box>
       </Box>
     </Box>

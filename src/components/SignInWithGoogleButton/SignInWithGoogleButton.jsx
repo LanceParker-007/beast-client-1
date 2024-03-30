@@ -1,7 +1,6 @@
 import React from "react";
 import "./signInWithGoogleButton.scss";
 import { Button, useToast } from "@chakra-ui/react";
-import { devServer } from "../../index";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
@@ -11,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { RiLogoutBoxLine } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 
-const SignInWithGoogleButton = ({ ...props }) => {
+const SignInWithGoogleButton = () => {
   const toast = useToast();
   const { user } = useSelector((state) => state.authSliceReducer);
   const dispatch = useDispatch();
@@ -40,7 +39,7 @@ const SignInWithGoogleButton = ({ ...props }) => {
           };
 
           const { data } = await axios.post(
-            `${devServer}/api/v1/user/signin-with-google`,
+            `${process.env.REACT_APP_SERVER}/api/v1/user/signin-with-google`,
             { username, email, pic },
             config
           );

@@ -6,6 +6,8 @@ const initialState = {
   loaderFile: null,
   wasmFile: null,
   buildFolder: false,
+
+  messageFromUnity: "",
 };
 
 const testGameSlice = createSlice({
@@ -27,6 +29,9 @@ const testGameSlice = createSlice({
     setBuildFolder(state, action) {
       state.buildFolder = action.payload;
     },
+    setMessageFromUnity(state, action) {
+      state.messageFromUnity = action.payload;
+    },
   },
 });
 
@@ -36,6 +41,7 @@ export const {
   setLoaderFile,
   setWasmFile,
   setBuildFolder,
+  setMessageFromUnity,
 } = testGameSlice.actions;
 
 const testGameSliceReducer = testGameSlice.reducer;
