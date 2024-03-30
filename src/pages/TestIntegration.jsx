@@ -147,7 +147,6 @@ const TestIntegration = () => {
         }
       );
 
-      console.log(data.games);
       await dispatch(setTestBuilds(data.games));
     }
   };
@@ -309,7 +308,6 @@ const TestIntegration = () => {
     const selectedTestBuild = testBuilds.find(
       (testBuild) => testBuild._id === selectedTestId
     );
-    console.log(selectedTestBuild);
 
     if (selectedTestBuild) {
       await dispatch(setDataFile(selectedTestBuild.dataFile));
