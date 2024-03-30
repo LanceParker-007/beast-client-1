@@ -87,9 +87,16 @@ const UnityGame = () => {
   }, [userGameId]);
 
   return (
-    <>
+    <Box width={"100%"} height={"100%"}>
       {!isLoaded && (
-        <Box bgColor={"red"} color={"white"} display={"flex"}>
+        <Box
+          bgColor={"#414141"}
+          color={"white"}
+          display={"flex"}
+          justifyContent={"center"}
+          height={"100%"}
+          alignItems={"center"}
+        >
           Loading Application... {Math.round(loadingProgression * 100)}%
         </Box>
       )}
@@ -101,7 +108,7 @@ const UnityGame = () => {
           width: "100%",
         }}
       />
-    </>
+    </Box>
   );
 };
 
