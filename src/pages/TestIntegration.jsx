@@ -8,7 +8,6 @@ import {
   Input,
   Select,
   StatDownArrow,
-  Text,
   useToast,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
@@ -155,10 +154,6 @@ const TestIntegration = () => {
 
   // Intiate Presigned Url and uploading to s3
   const getPresignedUrlUploadToS3 = async (file) => {
-    // Step 0: Check if gamename already present
-    const gamenameAlreadyPresentData = await ifGamenameAlreadyPrsent();
-    if (!gamenameAlreadyPresentData.success) return;
-
     // Step1: getPresignedUrl
     const preSignedUrlData = await getPresignedUrl(file);
     console.log(preSignedUrlData);
@@ -282,6 +277,17 @@ const TestIntegration = () => {
 
   useEffect(() => {
     if (data && framework && loader && wasm) {
+      // Check if gamename already present
+      const gamenameAlreadyPresentData = ifGamenameAlreadyPrsent();
+      if (!gamenameAlreadyPresentData.success) {
+        toast({
+          title: `Build already present with same name`,
+          variant: "top-accent",
+          status: "info",
+          isClosable: true,
+        });
+        return;
+      }
       getPresignedUrlUploadToS3(data);
       getPresignedUrlUploadToS3(framework);
       getPresignedUrlUploadToS3(loader);
