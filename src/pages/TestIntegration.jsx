@@ -1,5 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box, Button, Img, Input, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Divider,
+  Heading,
+  Img,
+  Input,
+  Select,
+  StatDownArrow,
+  Text,
+  useToast,
+} from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import UnityGame from "../components/unityGame/UnityGame";
 import axios from "axios";
@@ -13,8 +24,10 @@ import {
 } from "../redux/slices/testGameSlice";
 import { useNavigate } from "react-router-dom";
 import { DeleteIcon } from "@chakra-ui/icons";
+import { setTestBuilds, setUser } from "../redux/slices/authSlice";
+import Cookies from "js-cookie";
 
-const TestIntegration = ({ user }) => {
+const TestIntegration = () => {
   // To store file urls from we will get from s3
   const {
     dataFile,
@@ -24,10 +37,12 @@ const TestIntegration = ({ user }) => {
     buildFolder,
     messageFromUnity,
   } = useSelector((state) => state.testGameSliceReducer);
+  const { user, testBuilds } = useSelector((state) => state.authSliceReducer);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [gamename, setGamename] = useState("");
+  const [displayGameName, setDisplayGameName] = useState("");
   const [data, setData] = useState(null);
   const [framework, setFramework] = useState(null);
   const [loader, setLoader] = useState(null);
@@ -65,16 +80,12 @@ const TestIntegration = ({ user }) => {
     }
 
     const fileUploadInputTag = document.getElementById("gamebuildFolder");
-    console.log(fileUploadInputTag);
     fileUploadInputTag.click();
   };
 
   //Handle Build Folder Uploading
   const handlebuildFolderUpload = (e) => {
-    console.log(e.target.files);
     const tempFiles = Array.from(e.target.files);
-
-    console.log("48");
 
     tempFiles.forEach((tempFile, index) => {
       tempFile = e.target.files[index];
@@ -88,8 +99,28 @@ const TestIntegration = ({ user }) => {
         setWasm(tempFile);
       }
     });
+  };
 
-    console.log("70");
+  // Check if gamename already present
+  const ifGamenameAlreadyPrsent = async () => {
+    try {
+      const { data } = await axios.post(
+        `${process.env.REACT_APP_SERVER}/api/v1/user/if-gamename-already-present`,
+        {
+          gamename: gamename,
+          gameOwner: user._id,
+        }
+      );
+
+      return data;
+    } catch (error) {
+      toast({
+        title: "Some network eror",
+        variant: "top-accent",
+        status: "error",
+        isClosable: true,
+      });
+    }
   };
 
   // Get Presigned url from backend
@@ -107,8 +138,27 @@ const TestIntegration = ({ user }) => {
     return data;
   };
 
+  // Fetch all test builds of user
+  const fetchAllTestBuilds = async () => {
+    if (user) {
+      const { data } = await axios.post(
+        `${process.env.REACT_APP_SERVER}/api/v1/user/get-all-test-builds`,
+        {
+          gameOwner: user._id,
+        }
+      );
+
+      console.log(data.games);
+      await dispatch(setTestBuilds(data.games));
+    }
+  };
+
   // Intiate Presigned Url and uploading to s3
   const getPresignedUrlUploadToS3 = async (file) => {
+    // Step 0: Check if gamename already present
+    const gamenameAlreadyPresentData = await ifGamenameAlreadyPrsent();
+    if (!gamenameAlreadyPresentData.success) return;
+
     // Step1: getPresignedUrl
     const preSignedUrlData = await getPresignedUrl(file);
     console.log(preSignedUrlData);
@@ -163,28 +213,29 @@ const TestIntegration = ({ user }) => {
   };
 
   const saveFilesInfoToDB = async () => {
-    const { data } = await axios.post(
-      `${process.env.REACT_APP_SERVER}/api/v1/user/save-test-game-details`,
-      {
-        dataFile: dataFile,
-        frameworkFile: frameworkFile,
-        loaderFile: loaderFile,
-        wasmFile: wasmFile,
-        gamename: gamename,
-        gameOwner: user._id,
-      }
-    );
+    if (!gamename) return;
+    try {
+      const { data } = await axios.post(
+        `${process.env.REACT_APP_SERVER}/api/v1/user/save-test-game-details`,
+        {
+          dataFile: dataFile,
+          frameworkFile: frameworkFile,
+          loaderFile: loaderFile,
+          wasmFile: wasmFile,
+          gamename: gamename,
+          gameOwner: user._id,
+        }
+      );
 
-    if (data.success) {
       toast({
         title: data.message,
         variant: "top-accent",
-        status: "success",
+        status: data.success ? "success" : "info",
         isClosable: true,
       });
-    } else {
+    } catch (error) {
       toast({
-        title: data.message,
+        title: "Some error occured whilw saving the game.",
         variant: "top-accent",
         status: "error",
         isClosable: true,
@@ -242,17 +293,44 @@ const TestIntegration = ({ user }) => {
     if (dataFile && frameworkFile && loaderFile && wasmFile) {
       saveFilesInfoToDB();
       dispatch(setBuildFolder(true));
+      fetchAllTestBuilds();
     }
   }, [dataFile, frameworkFile, loaderFile, wasmFile]);
 
+  // Handle OnSelectTestBuild
+  const handleOnSelectGame = async (e) => {
+    const selectedTestId = e.target.value;
+    const selectedTestBuild = testBuilds.find(
+      (testBuild) => testBuild._id === selectedTestId
+    );
+    console.log(selectedTestBuild);
+
+    if (selectedTestBuild) {
+      await dispatch(setDataFile(selectedTestBuild.dataFile));
+      await dispatch(setFrameworkFile(selectedTestBuild.frameworkFile));
+      await dispatch(setLoaderFile(selectedTestBuild.loaderFile));
+      await dispatch(setWasmFile(selectedTestBuild.wasmFile));
+      setDisplayGameName(selectedTestBuild.gamename);
+    }
+  };
+
   useEffect(() => {
-    if (!user) {
+    const userInfo = Cookies.get("userInfo");
+    if (userInfo) {
+      dispatch(setUser(JSON.parse(userInfo)));
+    } else {
+      setUser(null);
       navigate("/");
     }
+  }, []);
+  useEffect(() => {
+    fetchAllTestBuilds();
   }, [user]);
 
   useState(() => {
+    console.log("1");
     setMessagesFromUnity(() => [...messagesFromUnity, messageFromUnity]);
+    console.log("2");
   }, [messageFromUnity]);
 
   return (
@@ -269,6 +347,7 @@ const TestIntegration = ({ user }) => {
         flexDirection={"column"}
         alignItems={"center"}
         justifyContent={["space-between", "center"]}
+        gap={22}
         padding={"1rem 0"}
         borderRight={"1px solid #f5f5f5"}
         borderRadius={"0 6px 0 0"}
@@ -282,72 +361,107 @@ const TestIntegration = ({ user }) => {
           directory=""
           onChange={(e) => handlebuildFolderUpload(e)}
         />
-
-        <Input
-          value={gamename}
-          onChange={(e) => setGamename(e.target.value)}
-          required={true}
-          placeholder="Enter your game name"
-          padding={"0.1rem 0.6rem"}
-          margin={"0.1rem auto"}
-          width={{ sm: "70%", lg: "83%" }}
-        />
         <Box
-          height={"130px"}
-          width={["300px", "380"]}
-          bgColor={"whitesmoke"}
-          borderRadius={"0.6rem"}
-          padding={"1rem"}
           display={"flex"}
           flexDirection={"column"}
-          justifyContent={"center"}
           alignItems={"center"}
-          marginTop={["1rem"]}
-          marginBottom={"1rem"}
-          onClick={!buildFolder ? () => initiateFileUpload() : () => {}}
+          justifyContent={"center"}
+          width={"100%"}
         >
+          <Select
+            width={{ sm: "92%", lg: "83%" }}
+            placeholder="Select from revious builds"
+            onChange={(e) => handleOnSelectGame(e)}
+            cursor={"pointer"}
+          >
+            {testBuilds.map((testBuild) => (
+              <option
+                key={testBuild._id}
+                value={testBuild._id}
+                style={{ cursor: "pointer" }}
+              >
+                {testBuild.gamename}
+              </option>
+            ))}
+          </Select>
+        </Box>
+        <Divider />
+        <Box
+          display={"flex"}
+          flexDirection={"column"}
+          alignItems={"center"}
+          justifyContent={"center"}
+        >
+          <Button>
+            Add new build <StatDownArrow />
+          </Button>
+          <Input
+            value={gamename}
+            onChange={(e) => setGamename(e.target.value)}
+            required={true}
+            placeholder="Enter your game name"
+            padding={"0.1rem 0.6rem"}
+            margin={"0.1rem auto"}
+            width={{ sm: "70%", lg: "83%" }}
+          />
           <Box
-            bgColor={"white"}
-            border={"2px dashed #cacaca"}
+            height={"130px"}
+            width={["300px", "380"]}
+            bgColor={"whitesmoke"}
             borderRadius={"0.6rem"}
-            height={"100%"}
-            width={"100%"}
+            padding={"1rem"}
             display={"flex"}
+            flexDirection={"column"}
             justifyContent={"center"}
             alignItems={"center"}
-            textAlign={"center"}
-            cursor={"pointer"}
-            fontFamily={"DM Mono, monospace"}
-            padding={"0 1px"}
+            marginTop={["1rem"]}
+            marginBottom={"1rem"}
+            onClick={!buildFolder ? () => initiateFileUpload() : () => {}}
           >
-            <Img
-              width="6"
-              height="6"
-              src="https://img.icons8.com/sf-regular/48/upload.png"
-              alt="upload"
-              margin={"0 4px 0 -6px"}
-            />
+            <Box
+              bgColor={"white"}
+              border={"2px dashed #cacaca"}
+              borderRadius={"0.6rem"}
+              height={"100%"}
+              width={"100%"}
+              display={"flex"}
+              justifyContent={"center"}
+              alignItems={"center"}
+              textAlign={"center"}
+              cursor={"pointer"}
+              fontFamily={"DM Mono, monospace"}
+              padding={"0 1px"}
+            >
+              <Img
+                width="6"
+                height="6"
+                src="https://img.icons8.com/sf-regular/48/upload.png"
+                alt="upload"
+                margin={"0 4px 0 -6px"}
+              />
 
-            {buildFolder
-              ? `All files correct`
-              : "Upload your Webgl Build Folder"}
+              {buildFolder
+                ? `All files correct`
+                : "Upload your Webgl Build Folder"}
+            </Box>
           </Box>
-        </Box>
 
-        <Button
-          leftIcon={<DeleteIcon />}
-          colorScheme="red"
-          onClick={handleDeleteMyBuilds}
-        >
-          Remove My All Builds
-        </Button>
+          <Button
+            leftIcon={<DeleteIcon />}
+            colorScheme="red"
+            onClick={handleDeleteMyBuilds}
+          >
+            Remove My All Builds
+          </Button>
+        </Box>
       </Box>
       {/* Game Screen */}
       <Box height={"100%"} width={"100%"} padding={"1rem"}>
         {/* Game will be visible here */}
+        <Heading>{displayGameName}</Heading>
         <Box
           id="gameSectionWindow"
-          height={"70vh"}
+          height={"83vh"}
           borderRadius={"6px"}
           display={"flex"}
           justifyContent={"center"}
@@ -403,7 +517,7 @@ const TestIntegration = ({ user }) => {
             }
             colorScheme={buildFolder ? "green" : "red"}
           >
-            Start Game
+            {!showGame ? "Start Game" : "GameRunning"}
           </Button>
 
           <Button
@@ -432,14 +546,15 @@ const TestIntegration = ({ user }) => {
           padding={"1rem"}
           boxShadow={"0 0 6px 1px black"}
         >
-          {messagesFromUnity.map((msg, index) => (
-            <Input
-              key={index}
-              placeholder="You can see messags from unity here on successfull integration."
-              value={msg}
-              readOnly={true}
-            ></Input>
-          ))}
+          {messagesFromUnity &&
+            messagesFromUnity.map((msg, index) => (
+              <Input
+                key={index}
+                placeholder="You can see messags from unity here on successfull integration."
+                value={msg}
+                readOnly={true}
+              ></Input>
+            ))}
         </Box>
       </Box>
     </Box>

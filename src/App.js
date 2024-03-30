@@ -20,7 +20,7 @@ import { setUser } from "./redux/slices/authSlice";
 // import Account from "./pages/Account";
 
 function App() {
-  const { user } = useSelector((state) => state.authSliceReducer);
+  const { user, testBuilds } = useSelector((state) => state.authSliceReducer);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -44,7 +44,7 @@ function App() {
           <Route path="/docs" element={<Docs />} />
           <Route
             path="/test-your-game"
-            element={<TestIntegration user={user} />}
+            element={<TestIntegration user={user} testBuilds={testBuilds} />}
           />
           {/* <Route path="/games" element={<AllGames />} /> */}
           {/* <Route path="/games/:gameId" element={<GameScreen />} /> */}

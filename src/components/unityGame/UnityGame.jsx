@@ -3,11 +3,13 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Unity, useUnityContext } from "react-unity-webgl";
 import { setMessageFromUnity } from "../../redux/slices/testGameSlice";
+import { Box, useToast } from "@chakra-ui/react";
 
 const UnityGame = () => {
   const { dataFile, frameworkFile, loaderFile, wasmFile } = useSelector(
     (state) => state.testGameSliceReducer
   );
+  const toast = useToast();
   const {
     sendMessage,
     addEventListener,
@@ -31,6 +33,11 @@ const UnityGame = () => {
 
   window.ReceiveMessageFromUnity = (message) => {
     console.log("Received message from Unity:", message);
+    toast({
+      title: message,
+      status: "success",
+      position: "top",
+    });
     dispatch(setMessageFromUnity(message));
   };
 
@@ -82,7 +89,9 @@ const UnityGame = () => {
   return (
     <>
       {!isLoaded && (
-        <p>Loading Application... {Math.round(loadingProgression * 100)}%</p>
+        <Box bgColor={"red"} color={"white"} display={"flex"}>
+          Loading Application... {Math.round(loadingProgression * 100)}%
+        </Box>
       )}
       <Unity
         unityProvider={unityProvider}
