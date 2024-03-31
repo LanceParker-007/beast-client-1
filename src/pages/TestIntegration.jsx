@@ -67,7 +67,7 @@ const TestIntegration = () => {
   };
 
   //Initiate Build Folder Uploading
-  const initiateFileUpload = () => {
+  const initiateFileUpload = async () => {
     if (!gamename) {
       toast({
         title: `Give your build a name!`,
@@ -76,10 +76,28 @@ const TestIntegration = () => {
         isClosable: true,
       });
       return;
-    }
+    } else {
+      const { data } = await axios.post(
+        `${process.env.REACT_APP_SERVER}/api/v1/user/if-gamename-already-present`,
+        {
+          gamename: gamename,
+          gameOwner: user._id,
+        }
+      );
 
-    const fileUploadInputTag = document.getElementById("gamebuildFolder");
-    fileUploadInputTag.click();
+      if (data.success) {
+        const fileUploadInputTag = document.getElementById("gamebuildFolder");
+        fileUploadInputTag.click();
+      } else {
+        toast({
+          title: `Build already present with same name!`,
+          variant: "top-accent",
+          status: "warning",
+          isClosable: true,
+        });
+        return;
+      }
+    }
   };
 
   //Handle Build Folder Uploading
@@ -98,28 +116,6 @@ const TestIntegration = () => {
         setWasm(tempFile);
       }
     });
-  };
-
-  // Check if gamename already present
-  const ifGamenameAlreadyPrsent = async () => {
-    try {
-      const { data } = await axios.post(
-        `${process.env.REACT_APP_SERVER}/api/v1/user/if-gamename-already-present`,
-        {
-          gamename: gamename,
-          gameOwner: user._id,
-        }
-      );
-
-      return data;
-    } catch (error) {
-      toast({
-        title: "Some network eror",
-        variant: "top-accent",
-        status: "error",
-        isClosable: true,
-      });
-    }
   };
 
   // Get Presigned url from backend
@@ -155,7 +151,6 @@ const TestIntegration = () => {
   const getPresignedUrlUploadToS3 = async (file) => {
     // Step1: getPresignedUrl
     const preSignedUrlData = await getPresignedUrl(file);
-    console.log(preSignedUrlData);
 
     const url = preSignedUrlData.signedURL.split("?")[0];
     const public_id = preSignedUrlData.public_id;
@@ -277,16 +272,6 @@ const TestIntegration = () => {
   useEffect(() => {
     if (data && framework && loader && wasm) {
       // Check if gamename already present
-      const gamenameAlreadyPresentData = ifGamenameAlreadyPrsent();
-      if (!gamenameAlreadyPresentData.success) {
-        toast({
-          title: `Build already present with same name`,
-          variant: "top-accent",
-          status: "info",
-          isClosable: true,
-        });
-        return;
-      }
       getPresignedUrlUploadToS3(data);
       getPresignedUrlUploadToS3(framework);
       getPresignedUrlUploadToS3(loader);
