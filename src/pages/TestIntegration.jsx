@@ -19,6 +19,7 @@ import {
   setDataFile,
   setFrameworkFile,
   setLoaderFile,
+  setMessageFromUnity,
   setWasmFile,
 } from "../redux/slices/testGameSlice";
 import { useNavigate } from "react-router-dom";
@@ -267,6 +268,8 @@ const TestIntegration = () => {
   const handleStopGame = () => {
     console.log("Stop Game");
     setShowGame(false);
+    dispatch(setMessageFromUnity(""));
+    setMessagesFromUnity([]);
   };
 
   useEffect(() => {
@@ -322,10 +325,12 @@ const TestIntegration = () => {
     fetchAllTestBuilds();
   }, [user]);
 
-  useState(() => {
-    console.log("1");
-    setMessagesFromUnity(() => [...messagesFromUnity, messageFromUnity]);
-    console.log("2");
+  useEffect(() => {
+    console.log(messageFromUnity);
+    if (messageFromUnity) {
+      if (!messagesFromUnity.includes(messageFromUnity))
+        setMessagesFromUnity(() => [...messagesFromUnity, messageFromUnity]);
+    }
   }, [messageFromUnity]);
 
   return (
@@ -541,7 +546,7 @@ const TestIntegration = () => {
           padding={"1rem"}
           boxShadow={"0 0 6px 1px black"}
         >
-          {messagesFromUnity &&
+          {messagesFromUnity.length !== 0 ? (
             messagesFromUnity.map((msg, index) => (
               <Input
                 key={index}
@@ -549,7 +554,10 @@ const TestIntegration = () => {
                 value={msg}
                 readOnly={true}
               ></Input>
-            ))}
+            ))
+          ) : (
+            <></>
+          )}
         </Box>
       </Box>
     </Box>
