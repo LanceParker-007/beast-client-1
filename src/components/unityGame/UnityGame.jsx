@@ -3,13 +3,13 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Unity, useUnityContext } from "react-unity-webgl";
 import { setMessageFromUnity } from "../../redux/slices/testGameSlice";
-import { Box, useToast } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 
 const UnityGame = () => {
   const { dataFile, frameworkFile, loaderFile, wasmFile } = useSelector(
     (state) => state.testGameSliceReducer
   );
-  const toast = useToast();
+
   const {
     sendMessage,
     addEventListener,
@@ -31,39 +31,50 @@ const UnityGame = () => {
   const [lobbyCode, setLobbyCode] = useState("");
   const [userGameId, setUserGameId] = useState("");
 
-  window.ReceiveMessageFromUnity = (message) => {
-    console.log("Received message from Unity:", message);
-    toast({
-      title: message,
-      status: "success",
-      position: "top",
-    });
-    dispatch(setMessageFromUnity(message));
-  };
-
   const handleUserGameID = useCallback((userId) => {
     console.log(userId);
     setUserGameId(userId);
+
+    dispatch(setMessageFromUnity(`${userId} received from unity`));
   }, []);
 
   const handleLobbyCode = useCallback((LobbyCode) => {
     console.log(LobbyCode);
     setLobbyCode(LobbyCode);
+    dispatch(setMessageFromUnity(`${LobbyCode} received from unity`));
+  }, []);
+
+  const handleDeleteInformation = useCallback((LobbyCode, username) => {
+    console.log(LobbyCode, username);
+    dispatch(setMessageFromUnity(`${username} leaft the lobby`));
+  }, []);
+
+  const handleJoinRequest = useCallback((LobbyCode, username) => {
+    console.log(LobbyCode, username);
+    dispatch(
+      setMessageFromUnity(`${LobbyCode} joined the lobby from inside the game`)
+    );
   }, []);
 
   useEffect(() => {
     addEventListener("SendUserIdToReact", handleUserGameID);
     addEventListener("SendLobbyCodeToReact", handleLobbyCode);
+    addEventListener("SendDeleteInformation", handleDeleteInformation);
+    addEventListener("SendJoinLobbyRequest", handleJoinRequest);
 
     return () => {
       removeEventListener("SendUserIdToReact", handleUserGameID);
       removeEventListener("SendLobbyCodeToReact", handleLobbyCode);
+      removeEventListener("SendDeleteInformation", handleDeleteInformation);
+      removeEventListener("SendJoinLobbyRequest", handleJoinRequest);
     };
   }, [
     addEventListener,
     removeEventListener,
     handleUserGameID,
     handleLobbyCode,
+    handleDeleteInformation,
+    handleJoinRequest,
   ]);
 
   useEffect(() => {

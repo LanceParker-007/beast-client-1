@@ -300,6 +300,12 @@ const TestIntegration = () => {
       await dispatch(setLoaderFile(selectedTestBuild.loaderFile));
       await dispatch(setWasmFile(selectedTestBuild.wasmFile));
       setDisplayGameName(selectedTestBuild.gamename);
+      setGamename("");
+      setDataFile("");
+      setFramework("");
+      setLoader("");
+      setWasm("");
+      setShowGame(false);
     }
   };
 
