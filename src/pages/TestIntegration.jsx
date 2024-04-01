@@ -545,6 +545,7 @@ const TestIntegration = () => {
           marginTop={"1rem"}
           padding={"1rem"}
           boxShadow={"0 0 6px 1px black"}
+          overflow={"auto"}
         >
           {messagesFromUnity.length !== 0 ? (
             messagesFromUnity.map((msg, index) => (
