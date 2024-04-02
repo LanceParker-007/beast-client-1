@@ -2,7 +2,7 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import "./App.scss";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
-import { Box } from "@chakra-ui/react";
+import { Box, useToast } from "@chakra-ui/react";
 import Home from "./pages/Home/Home";
 import ContactUs from "./pages/ContactUs";
 import Docs from "./pages/Docs";
@@ -23,6 +23,7 @@ function App() {
   const { user, testBuilds } = useSelector((state) => state.authSliceReducer);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const toast = useToast();
 
   useEffect(() => {
     const userInfo = Cookies.get("userInfo");
@@ -30,6 +31,11 @@ function App() {
       dispatch(setUser(JSON.parse(userInfo)));
       setIsAuthenticated(true);
     } else {
+      toast({
+        title: "Please login",
+        position: "top",
+        status: "error",
+      });
       setUser(null);
       setIsAuthenticated(false);
       navigate("/");
