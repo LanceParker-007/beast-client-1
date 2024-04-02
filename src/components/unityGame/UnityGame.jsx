@@ -57,16 +57,16 @@ const UnityGame = () => {
   }, []);
 
   useEffect(() => {
-    addEventListener("SendUserIdToReact", handleUserGameID);
-    addEventListener("SendLobbyCodeToReact", handleLobbyCode);
-    addEventListener("SendDeleteInformation", handleDeleteInformation);
-    addEventListener("SendJoinLobbyRequest", handleJoinRequest);
+    addEventListener("ShareUserId", handleUserGameID);
+    addEventListener("ShareLobbyCode", handleLobbyCode);
+    addEventListener("ShareDeleteInformation", handleDeleteInformation);
+    addEventListener("ShareJoinLobbyRequest", handleJoinRequest);
 
     return () => {
-      removeEventListener("SendUserIdToReact", handleUserGameID);
-      removeEventListener("SendLobbyCodeToReact", handleLobbyCode);
-      removeEventListener("SendDeleteInformation", handleDeleteInformation);
-      removeEventListener("SendJoinLobbyRequest", handleJoinRequest);
+      removeEventListener("ShareUserId", handleUserGameID);
+      removeEventListener("ShareLobbyCode", handleLobbyCode);
+      removeEventListener("ShareDeleteInformation", handleDeleteInformation);
+      removeEventListener("ShareJoinLobbyRequest", handleJoinRequest);
     };
   }, [
     addEventListener,
@@ -78,7 +78,7 @@ const UnityGame = () => {
   ]);
 
   useEffect(() => {
-    sendMessage("GameController", "LobbyCodeFromBrowser", "Qwerty");
+    sendMessage("GameController", "LobbyCodeFromBrowser", "QWERTY");
   });
 
   useEffect(() => {

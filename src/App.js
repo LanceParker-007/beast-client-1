@@ -10,7 +10,7 @@ import TestIntegration from "./pages/TestIntegration";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import Cookies from "js-cookie";
-import { setUser } from "./redux/slices/authSlice";
+import { setIsAuthenticated, setUser } from "./redux/slices/authSlice";
 // import AllGames from "./pages/AllGames";
 // import About from "./pages/About";
 // import Privacy from "./pages/Privacy";
@@ -28,8 +28,10 @@ function App() {
     const userInfo = Cookies.get("userInfo");
     if (userInfo) {
       dispatch(setUser(JSON.parse(userInfo)));
+      setIsAuthenticated(true);
     } else {
       setUser(null);
+      setIsAuthenticated(false);
       navigate("/");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -55,7 +57,7 @@ function App() {
           {/* <Route path="/terms-of-service" element={<TermsAndConditions />} /> */}
           {/* <Route path="/privacy-policy" element={<Privacy />} /> */}
           {/* <Route path="/developers" element={<Developers />} /> */}
-          <Route path="/*" element={<Docs />} />
+          {/* <Route path="/*" element={<Docs />} /> */}
         </Routes>
       </Box>
       <Footer />
