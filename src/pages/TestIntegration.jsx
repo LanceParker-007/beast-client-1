@@ -21,7 +21,7 @@ import {
   setLoaderFile,
   setMessageFromUnity,
   setWasmFile,
-} from "../redux/slices/testGameSlice";
+} from "../redux/slices/gameSlice";
 import { useNavigate } from "react-router-dom";
 import { DeleteIcon } from "@chakra-ui/icons";
 import { setTestBuilds, setUser } from "../redux/slices/authSlice";
@@ -37,7 +37,7 @@ const TestIntegration = () => {
     wasmFile,
     buildFolder,
     messageFromUnity,
-  } = useSelector((state) => state.testGameSliceReducer);
+  } = useSelector((state) => state.gameSliceReducer);
   const { user, testBuilds } = useSelector((state) => state.authSliceReducer);
   const dispatch = useDispatch();
   const navigate = useNavigate();

@@ -16,7 +16,7 @@ import AllGames from "./pages/AllGames";
 // import Privacy from "./pages/Privacy";
 // import Developers from "./pages/Developers";
 // import TermsAndConditions from "./pages/TermsAndConditions";
-// import GameScreen from "./pages/GameScreen";
+import GameScreen from "./pages/GameScreen";
 import Account from "./pages/Account";
 import TestingMainFeature from "./pages/TestingMainFeature/TestingMainFeature";
 
@@ -60,7 +60,7 @@ function App() {
             element={<TestingMainFeature user={user} />}
           />
           <Route path="/games" element={<AllGames />} />
-          {/* <Route path="/games/:gameId" element={<GameScreen />} /> */}
+          <Route path="/games/:userId/:gameId" element={<GameScreen />} />
           <Route path="/account" element={<Account />} />
           {/* <Route path="/#about-us" element={<About />} /> */}
           <Route path="/contact-us" element={<ContactUs />} />

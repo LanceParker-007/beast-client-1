@@ -10,8 +10,8 @@ const initialState = {
   messageFromUnity: "",
 };
 
-const testGameSlice = createSlice({
-  name: "testGameSlice",
+const gameSlice = createSlice({
+  name: "gameSlice",
   initialState,
   reducers: {
     setDataFile(state, action) {
@@ -42,7 +42,7 @@ export const {
   setWasmFile,
   setBuildFolder,
   setMessageFromUnity,
-} = testGameSlice.actions;
+} = gameSlice.actions;
 
-const testGameSliceReducer = testGameSlice.reducer;
-export default testGameSliceReducer;
+const gameSliceReducer = gameSlice.reducer;
+export default gameSliceReducer;

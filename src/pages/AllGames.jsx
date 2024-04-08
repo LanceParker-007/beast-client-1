@@ -12,11 +12,12 @@ const AllGames = () => {
   const toast = useToast();
 
   const fetchAllGames = async () => {
-    dispatch(fetchAllPublicGames({}));
+    await dispatch(fetchAllPublicGames({}));
   };
 
   useEffect(() => {
     fetchAllGames();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -28,13 +29,26 @@ const AllGames = () => {
         isClosable: true,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [failMessage]);
 
   return (
     <Box className="allGames" minHeight={"100vh"} my={"11vh"}>
-      <CardRow />
-      <CardRow />
-      <CardRow />
+      <CardRow
+        rowHeading="New Games"
+        rowSubHeading="Play the newly arrived games"
+        cardsArray={publicGames}
+      />
+      <CardRow
+        rowHeading="Trending Games"
+        rowSubHeading="Play the newly arrived games"
+        cardsArray={publicGames}
+      />
+      <CardRow
+        rowHeading="All Time Favourite Games"
+        rowSubHeading="Play the newly arrived games"
+        cardsArray={publicGames}
+      />
     </Box>
   );
 };

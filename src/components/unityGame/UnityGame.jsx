@@ -2,13 +2,13 @@
 import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Unity, useUnityContext } from "react-unity-webgl";
-import { setMessageFromUnity } from "../../redux/slices/testGameSlice";
+import { setMessageFromUnity } from "../../redux/slices/gameSlice";
 import { Box } from "@chakra-ui/react";
 import { setUserGameId, setLobbyCode } from "../../redux/slices/unityGameSlice";
 
 const UnityGame = () => {
   const { dataFile, frameworkFile, loaderFile, wasmFile } = useSelector(
-    (state) => state.testGameSliceReducer
+    (state) => state.gameSliceReducer
   );
 
   const {
