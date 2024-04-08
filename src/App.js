@@ -11,13 +11,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import Cookies from "js-cookie";
 import { setIsAuthenticated, setUser } from "./redux/slices/authSlice";
-// import AllGames from "./pages/AllGames";
+import AllGames from "./pages/AllGames";
 // import About from "./pages/About";
 // import Privacy from "./pages/Privacy";
 // import Developers from "./pages/Developers";
 // import TermsAndConditions from "./pages/TermsAndConditions";
 // import GameScreen from "./pages/GameScreen";
-// import Account from "./pages/Account";
+import Account from "./pages/Account";
+import TestingMainFeature from "./pages/TestingMainFeature/TestingMainFeature";
 
 function App() {
   const { user, testBuilds } = useSelector((state) => state.authSliceReducer);
@@ -54,10 +55,13 @@ function App() {
             path="/test-your-game"
             element={<TestIntegration user={user} testBuilds={testBuilds} />}
           />
-          {/* <Route path="/games" element={<AllGames />} /> */}
+          <Route
+            path="/testing-main-feature/:userId"
+            element={<TestingMainFeature user={user} />}
+          />
+          <Route path="/games" element={<AllGames />} />
           {/* <Route path="/games/:gameId" element={<GameScreen />} /> */}
-          {/* <Route path="/games/click-war" element={<GameScreen />} /> */}
-          {/* <Route path="/account" element={<Account />} /> */}
+          <Route path="/account" element={<Account />} />
           {/* <Route path="/#about-us" element={<About />} /> */}
           <Route path="/contact-us" element={<ContactUs />} />
           {/* <Route path="/terms-of-service" element={<TermsAndConditions />} /> */}

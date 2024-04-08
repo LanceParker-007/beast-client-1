@@ -7,7 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleScroll = () => {
     const scrollPercentage = (window.scrollY / window.innerHeight) * 100;
@@ -56,21 +56,6 @@ const Header = () => {
             width={"12"}
             height={"12"}
             rounded={"full"}
-            onClick={onOpen}
-            margin={"4px"}
-            _hover={{
-              boxShadow:
-                "0 -1px 0 rgba(0, 0, 0, 0.04), 0 1px 1px rgba(0, 0, 0, 0.25)",
-            }}
-          >
-            <RiMenu5Fill size={"24vh"} />
-          </Button>
-          {/* <Button
-            bg={isScrolled ? "#FBFBFF" : "black"}
-            color={isScrolled ? "black" : "white"}
-            width={"12"}
-            height={"12"}
-            rounded={"full"}
             onClick={() => {
               navigate("/account");
             }}
@@ -81,7 +66,22 @@ const Header = () => {
             }}
           >
             <RiAccountCircleFill />
-          </Button> */}
+          </Button>
+          <Button
+            bg={isScrolled ? "#FBFBFF" : "black"}
+            color={isScrolled ? "black" : "white"}
+            width={"12"}
+            height={"12"}
+            rounded={"full"}
+            onClick={onOpen}
+            margin={"4px"}
+            _hover={{
+              boxShadow:
+                "0 -1px 0 rgba(0, 0, 0, 0.04), 0 1px 1px rgba(0, 0, 0, 0.25)",
+            }}
+          >
+            <RiMenu5Fill size={"24vh"} />
+          </Button>
         </HStack>
       </HStack>
 

@@ -119,11 +119,11 @@ const Navbar = ({ isOpen, onClose }) => {
         <DrawerBody mt={4}>
           <VStack spacing={"4"} alignItems={"flex-start"}>
             {/* <LinkButton onClose={onClose} url={"/"} title={"Home"} /> */}
-            {/* <LinkButton
+            <LinkButton
               onClose={onClose}
               url={"/games"}
               title={"Browse All Games"}
-            /> */}
+            />
             <LinkButton onClose={onClose} url={"/docs"} title={"Docs"} />
             <LinkButton
               onClose={onClose}

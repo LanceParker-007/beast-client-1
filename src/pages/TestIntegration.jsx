@@ -26,6 +26,7 @@ import { useNavigate } from "react-router-dom";
 import { DeleteIcon } from "@chakra-ui/icons";
 import { setTestBuilds, setUser } from "../redux/slices/authSlice";
 import Cookies from "js-cookie";
+import { setLobbyCode } from "../redux/slices/unityGameSlice";
 
 const TestIntegration = () => {
   // To store file urls from we will get from s3
@@ -312,6 +313,12 @@ const TestIntegration = () => {
     }
   };
 
+  const joinLobby = () => {
+    console.log("Start Game");
+    setShowGame(true);
+    dispatch(setLobbyCode("QWERTY"));
+  };
+
   useEffect(() => {
     const userInfo = Cookies.get("userInfo");
     if (userInfo) {
@@ -321,6 +328,7 @@ const TestIntegration = () => {
       navigate("/");
     }
   }, []);
+
   useEffect(() => {
     fetchAllTestBuilds();
   }, [user]);
@@ -500,8 +508,27 @@ const TestIntegration = () => {
             <></>
           )}
         </Box>
-        {/* Start, Stop, Restart game */}
+        {/* Start, Stop, Join game */}
         <Box display={"flex"} justifyContent={"center"} gap={11} padding={1}>
+          {/* Join */}
+          <Button
+            disabled={buildFolder ? false : true}
+            onClick={
+              buildFolder
+                ? joinLobby
+                : () =>
+                    toast({
+                      title: `Select a game`,
+                      variant: "top-accent",
+                      status: "warning",
+                      isClosable: true,
+                    })
+            }
+            colorScheme={buildFolder ? "green" : "red"}
+          >
+            Join Game
+          </Button>
+          {/* Start Game */}
           <Button
             disabled={buildFolder ? false : true}
             onClick={
@@ -509,7 +536,7 @@ const TestIntegration = () => {
                 ? handleStartGame
                 : () =>
                     toast({
-                      title: `Upload your build folder first`,
+                      title: `Select a game`,
                       variant: "top-accent",
                       status: "warning",
                       isClosable: true,
@@ -519,7 +546,6 @@ const TestIntegration = () => {
           >
             {!showGame ? "Start Game" : "GameRunning"}
           </Button>
-
           <Button
             disabled={buildFolder ? false : true}
             onClick={

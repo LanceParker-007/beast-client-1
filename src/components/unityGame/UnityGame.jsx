@@ -1,9 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Unity, useUnityContext } from "react-unity-webgl";
 import { setMessageFromUnity } from "../../redux/slices/testGameSlice";
 import { Box } from "@chakra-ui/react";
+import { setUserGameId, setLobbyCode } from "../../redux/slices/unityGameSlice";
 
 const UnityGame = () => {
   const { dataFile, frameworkFile, loaderFile, wasmFile } = useSelector(
@@ -28,19 +29,20 @@ const UnityGame = () => {
   });
 
   const dispatch = useDispatch();
-  const [lobbyCode, setLobbyCode] = useState("");
-  const [userGameId, setUserGameId] = useState("");
+  const { userGameId, lobbyCode } = useSelector(
+    (state) => state.unityGameSliceReducer
+  );
 
   const handleUserGameID = useCallback((userId) => {
     console.log(userId);
-    setUserGameId(userId);
+    dispatch(setUserGameId(userId));
 
     dispatch(setMessageFromUnity(`${userId} received from unity`));
   }, []);
 
   const handleLobbyCode = useCallback((LobbyCode) => {
     console.log(LobbyCode);
-    setLobbyCode(LobbyCode);
+    dispatch(setLobbyCode(LobbyCode));
     dispatch(setMessageFromUnity(`${LobbyCode} received from unity`));
   }, []);
 
@@ -78,14 +80,17 @@ const UnityGame = () => {
   ]);
 
   useEffect(() => {
-    sendMessage("GameController", "LobbyCodeFromBrowser", "QWERTY");
-  });
+    if (userGameId && lobbyCode) {
+      console.log("Sending joining Request");
+      sendMessage("GameController", "LobbyCodeFromBrowser", "QWERTY");
+    }
+  }, [userGameId, lobbyCode]);
 
   useEffect(() => {
     sendMessage(
       "GameController",
       "MessageFromReact",
-      "Lobby code received successfully"
+      "Lobby code received successfully message from PlayBrutal"
     );
   }, [lobbyCode]);
 
@@ -93,7 +98,7 @@ const UnityGame = () => {
     sendMessage(
       "GameController",
       "MessageFromReact",
-      "User game Id received successfully"
+      "User game Id received successfully message from PlayBrutal"
     );
   }, [userGameId]);
 
