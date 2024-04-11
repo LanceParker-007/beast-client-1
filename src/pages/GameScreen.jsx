@@ -149,6 +149,7 @@ const GameScreen = () => {
                 display="flex"
                 alignItems="center"
                 justifyContent="center"
+                textAlign={"center"}
                 fontFamily={"DM Monospace, monospace"}
                 cursor={"pointer"}
                 _hover={{
@@ -157,7 +158,7 @@ const GameScreen = () => {
                   transition: "all 0.2s",
                 }}
               >
-                {viewer.username}+l
+                {viewer.username}
               </Box>
             ))}
         </Box>

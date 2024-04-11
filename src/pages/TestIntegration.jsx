@@ -324,7 +324,6 @@ const TestIntegration = () => {
   }, [user]);
 
   useEffect(() => {
-    console.log(messageFromUnity);
     if (messageFromUnity) {
       if (!messagesFromUnity.includes(messageFromUnity))
         setMessagesFromUnity(() => [...messagesFromUnity, messageFromUnity]);

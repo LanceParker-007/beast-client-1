@@ -18,7 +18,6 @@ const useSocketConnection = (user, urlUserId, gameId) => {
     // Listen for updates to the viewers list
 
     socket.on("update-viewers", (viewers) => {
-      console.log(viewers);
       dispatch(setViewers(viewers));
     });
   };
