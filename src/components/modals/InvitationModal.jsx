@@ -21,9 +21,6 @@ const InvitationModal = ({ invitation, onResponse }) => {
 
   return (
     <>
-      <Button mt={4} onClick={onOpen}>
-        Open Modal
-      </Button>
       <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>

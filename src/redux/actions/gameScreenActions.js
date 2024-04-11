@@ -11,8 +11,6 @@ export const getGame = createAsyncThunk(
           gameId: gameId,
         }
       );
-
-      console.log(data);
       if (data.success) {
         return data.data;
       } else {

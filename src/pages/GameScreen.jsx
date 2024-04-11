@@ -1,5 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Box, Heading } from "@chakra-ui/react";
+import {
+  Box,
+  Heading,
+  Text,
+  Button,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import LiveStream from "../components/liveStream/LiveStream";
 import { useParams } from "react-router-dom";
@@ -7,8 +19,13 @@ import UnityGame from "../components/unityGame/UnityGame";
 import { useDispatch } from "react-redux";
 import { getGame } from "../redux/actions/gameScreenActions";
 import useSocketConnection from "../utils/socket";
-import { setGameFilesEmpty } from "../redux/slices/gameScreenSlice";
+import {
+  setGameFilesEmpty,
+  setInvitatedLobbyCode,
+  setInvitedUrl,
+} from "../redux/slices/gameScreenSlice";
 import { useNavigate } from "react-router-dom";
+import { setLobbyCode } from "../redux/slices/unityGameSlice";
 
 const videoId = "mp_t-oMycyE" || process.env.REACT_APP_DUMMY_VIDEO_ID;
 const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
@@ -16,8 +33,17 @@ const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
 const GameScreen = () => {
   const { userId, gameId } = useParams();
   const { user } = useSelector((state) => state.authSliceReducer);
-  const { gamename, dataFile, frameworkFile, loaderFile, wasmFile, viewers } =
-    useSelector((state) => state.gameScreenSliceReducer);
+  const {
+    gamename,
+    dataFile,
+    frameworkFile,
+    loaderFile,
+    wasmFile,
+    viewers,
+    invitedUrl,
+    invitedLobbyCode,
+  } = useSelector((state) => state.gameScreenSliceReducer);
+  const { lobbyCode } = useSelector((state) => state.unityGameSliceReducer);
   // Custom hook to get connected to socket
   const {
     connectToSocketNetwork,
@@ -35,27 +61,25 @@ const GameScreen = () => {
   const handleUserSelection = (viewer) => {
     setSelectedUser(viewer);
   };
-
-  // Generate invitation URL
-  const invitationUrl = `${window.location.origin}${window.location.pathname}`;
-  console.log(invitationUrl);
   //------ Handle select user end
 
   //------ Handle Invited User start
-  const [invitation, setInvitation] = useState(null);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
-  // Handle invitation event from the server or WebSocket
-  const handleInvitationReceived = (invitationData) => {
-    setInvitation(invitationData);
+  const handleAcceptRequest = () => {
+    console.log(invitedLobbyCode);
+    // setLobbyCode(invitedLobbyCode);
+    // window.open(invitedUrl, "_blank");
+    navigate(invitedUrl, { target: "_blank" });
+    dispatch(setInvitedUrl(""));
+    dispatch(setInvitatedLobbyCode(""));
+    onClose();
   };
 
-  // Handle user response to the invitation
-  const handleInvitationResponse = (accepted) => {
-    if (accepted) {
-      // Open a new tab or window with the invitation URL
-      window.open(invitation.invitationUrl, "_blank");
-    }
-    setInvitation(null);
+  const handleDeclineRequest = () => {
+    dispatch(setInvitedUrl(""));
+    dispatch(setInvitatedLobbyCode(""));
+    onClose();
   };
   //------ Handle Invited User end
 
@@ -74,6 +98,8 @@ const GameScreen = () => {
     const handleBeforeUnload = () => {
       if (userId && gameId) disconnectFromSocketNetwork(user, userId, gameId);
       dispatch(setGameFilesEmpty());
+      dispatch(setInvitedUrl(""));
+      dispatch(setInvitatedLobbyCode(""));
     };
     window.addEventListener("beforeunload", handleBeforeUnload);
 
@@ -81,15 +107,24 @@ const GameScreen = () => {
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
-  }, [user, gameId]);
+  }, [user, userId, gameId]);
 
   useEffect(() => {
-    // Share invitation URL with the selected user
     if (selectedUser) {
-      sendInvitationToUser(selectedUser?.socketId, invitationUrl, "YOYOYO");
+      console.log(selectedUser);
+      // Generate viewer invite url
+      const invitationUrl = `/games/${selectedUser?.userId}/${gameId}`;
+
+      // Share invitation URL with the selected user
+      sendInvitationToUser(selectedUser?.socketId, invitationUrl, "QWERTY");
       setSelectedUser(null);
     }
   }, [selectedUser]);
+
+  useEffect(() => {
+    if (invitedUrl && invitedLobbyCode && lobbyCode && user?.id !== userId)
+      onOpen();
+  }, [invitedUrl, invitedLobbyCode, lobbyCode]);
 
   return (
     <Box
@@ -115,6 +150,7 @@ const GameScreen = () => {
               publicGameFrameworkUrl={frameworkFile}
               publicGameLoaderUrl={loaderFile}
               publicGameWasmUrl={wasmFile}
+              invitedLobbyCode={invitedLobbyCode}
             />
           </Box>
         ) : user?._id !== userId && streamLink ? (
@@ -146,14 +182,14 @@ const GameScreen = () => {
       <Box
         bgColor={"white"}
         borderRadius={11}
-        height={{ base: "60vh", lg: "83vh" }}
+        height={{ base: "60vh", md: "83vh" }}
         width={{ base: "100%", lg: "35%" }}
       >
         <Box px={2}>
           <Heading fontFamily={"Jockey One"}>Chat room</Heading>
         </Box>
         <Box
-          height={"91%"}
+          height={"83%"}
           width={{ base: "100%" }}
           display="grid"
           gridTemplateColumns="repeat(auto-fit, minmax(200px, 1fr))"
@@ -194,13 +230,58 @@ const GameScreen = () => {
                   backgroundColor: "#414141",
                   transition: "all 0.2s",
                 }}
-                onClick={() => handleUserSelection(viewer)}
+                onClick={
+                  user?._id === userId
+                    ? () => handleUserSelection(viewer)
+                    : () => {}
+                }
               >
                 {viewer.username}
               </Box>
             ))}
         </Box>
       </Box>
+
+      {/* Modal to accept invite */}
+      <Modal isOpen={isOpen} onClose={onClose} size="sm">
+        <ModalOverlay />
+        <ModalContent h="300px">
+          {" "}
+          {/* Set a fixed height */}
+          <ModalHeader
+            fontSize="2xl"
+            fontWeight="bold"
+            textAlign="center"
+            color="Orange"
+          >
+            Game Invitation 🚀
+          </ModalHeader>
+          <ModalBody>
+            <Box textAlign="center" mb={4}>
+              <Text>You have been invited to join the game.</Text>
+            </Box>
+          </ModalBody>
+          <ModalFooter justifyContent="center">
+            <Button
+              colorScheme="green"
+              mr={3}
+              onClick={handleAcceptRequest}
+              fontSize="md"
+              fontWeight="bold"
+            >
+              Accept
+            </Button>
+            <Button
+              colorScheme="red"
+              onClick={handleDeclineRequest}
+              fontSize="md"
+              fontWeight="bold"
+            >
+              Decline
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 };

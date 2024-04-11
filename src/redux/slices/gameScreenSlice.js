@@ -9,6 +9,9 @@ const initialState = {
   loaderFile: "",
   wasmFile: "",
 
+  invitedUrl: "",
+  invitedLobbyCode: "",
+
   // Video Id if any the youtuber wants to paste
   videoId: "",
 
@@ -33,6 +36,12 @@ const gameScreenSlice = createSlice({
       state.loaderFile = "";
       state.wasmFile = "";
     },
+    setInvitedUrl(state, action) {
+      state.invitedUrl = action.payload;
+    },
+    setInvitatedLobbyCode(state, action) {
+      state.invitedLobbyCode = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -55,6 +64,11 @@ const gameScreenSlice = createSlice({
   },
 });
 
-export const { setViewers, setGameFilesEmpty } = gameScreenSlice.actions;
+export const {
+  setViewers,
+  setGameFilesEmpty,
+  setInvitedUrl,
+  setInvitatedLobbyCode,
+} = gameScreenSlice.actions;
 const gameScreenSliceReducer = gameScreenSlice.reducer;
 export default gameScreenSliceReducer;

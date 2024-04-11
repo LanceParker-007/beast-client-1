@@ -1,6 +1,12 @@
 import { io } from "socket.io-client";
 import { useDispatch } from "react-redux";
-import { setViewers } from "../redux/slices/gameScreenSlice";
+import {
+  setInvitatedLobbyCode,
+  setInvitedUrl,
+  setViewers,
+} from "../redux/slices/gameScreenSlice";
+import { useDisclosure } from "@chakra-ui/react";
+import { setLobbyCode } from "../redux/slices/unityGameSlice";
 
 const SOCKET_IO_URL = "http://localhost:5000"; // Replace with your server URL
 
@@ -10,6 +16,7 @@ const socket = io(SOCKET_IO_URL, {
 
 const useSocketConnection = (user, urlUserId, gameId) => {
   const dispatch = useDispatch();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   // connect user to socket pool
   const connectToSocketNetwork = async () => {
@@ -23,8 +30,10 @@ const useSocketConnection = (user, urlUserId, gameId) => {
 
     // Listen for invitation event
     socket.on("invitation-from-steamer", ({ invitationUrl, gameLobbyCode }) => {
-      // handleInvitationReceived(invitation);
       console.log(invitationUrl, gameLobbyCode);
+      dispatch(setInvitedUrl(invitationUrl));
+      dispatch(setInvitatedLobbyCode(gameLobbyCode));
+      dispatch(setLobbyCode(gameLobbyCode));
     });
   };
 

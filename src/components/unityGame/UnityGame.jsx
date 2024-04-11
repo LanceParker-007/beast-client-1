@@ -11,6 +11,7 @@ const UnityGame = ({
   publicGameFrameworkUrl = "",
   publicGameLoaderUrl = "",
   publicGameWasmUrl = "",
+  invitedLobbyCode = "",
 }) => {
   const { dataFile, frameworkFile, loaderFile, wasmFile } = useSelector(
     (state) => state.gameSliceReducer
@@ -85,9 +86,10 @@ const UnityGame = ({
   ]);
 
   useEffect(() => {
+    if (lobbyCode) console.log("BRO: ", userGameId, lobbyCode);
     if (userGameId && lobbyCode) {
-      console.log("Sending joining Request");
-      sendMessage("GameController", "LobbyCodeFromBrowser", "QWERTY");
+      console.log("BRRRROO, Sending joining Request");
+      sendMessage("GameController", "LobbyCodeFromBrowser", lobbyCode);
     }
   }, [userGameId, lobbyCode]);
 
@@ -98,6 +100,11 @@ const UnityGame = ({
       "Lobby code received successfully message from PlayBrutal"
     );
   }, [lobbyCode]);
+
+  useEffect(() => {
+    console.log("ILC", invitedLobbyCode);
+    if (invitedLobbyCode) dispatch(setLobbyCode(invitedLobbyCode));
+  }, [invitedLobbyCode]);
 
   useEffect(() => {
     sendMessage(
