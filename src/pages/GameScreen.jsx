@@ -6,7 +6,6 @@ import { useParams } from "react-router-dom";
 import UnityGame from "../components/unityGame/UnityGame";
 import { useDispatch } from "react-redux";
 import { getGame } from "../redux/actions/gameScreenActions";
-import SignInWithGoogleButton from "../components/signInWithGoogleButton/SignInWithGoogleButton";
 import useSocketConnection from "../utils/socket";
 import { setGameFilesEmpty } from "../redux/slices/gameScreenSlice";
 import { useNavigate } from "react-router-dom";
