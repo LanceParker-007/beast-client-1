@@ -8,7 +8,7 @@ import {
 import { useDisclosure } from "@chakra-ui/react";
 import { setLobbyCode } from "../redux/slices/unityGameSlice";
 
-const SOCKET_IO_URL = process.env.REACT_APP_SERVER; // Replace with your server URL
+const SOCKET_IO_URL = "https://beast-server-1.vercel.app";
 
 const socket = io(SOCKET_IO_URL, {
   autoConnect: false,
