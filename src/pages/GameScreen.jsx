@@ -16,17 +16,49 @@ const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
 
 const GameScreen = () => {
   const { userId, gameId } = useParams();
-  console.log(gameId);
   const { user } = useSelector((state) => state.authSliceReducer);
   const { gamename, dataFile, frameworkFile, loaderFile, wasmFile, viewers } =
     useSelector((state) => state.gameScreenSliceReducer);
   // Custom hook to get connected to socket
-  const { connectToSocketNetwork, disconnectFromSocketNetwork } =
-    useSocketConnection(user, userId, gameId);
+  const {
+    connectToSocketNetwork,
+    disconnectFromSocketNetwork,
+    sendInvitationToUser,
+  } = useSocketConnection(user, userId, gameId);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [streamLink, setStreamLink] = useState(videoUrl);
+
+  //------ Handle select user start
+  const [selectedUser, setSelectedUser] = useState(null);
+
+  const handleUserSelection = (viewer) => {
+    setSelectedUser(viewer);
+  };
+
+  // Generate invitation URL
+  const invitationUrl = `${window.location.origin}${window.location.pathname}`;
+  console.log(invitationUrl);
+  //------ Handle select user end
+
+  //------ Handle Invited User start
+  const [invitation, setInvitation] = useState(null);
+
+  // Handle invitation event from the server or WebSocket
+  const handleInvitationReceived = (invitationData) => {
+    setInvitation(invitationData);
+  };
+
+  // Handle user response to the invitation
+  const handleInvitationResponse = (accepted) => {
+    if (accepted) {
+      // Open a new tab or window with the invitation URL
+      window.open(invitation.invitationUrl, "_blank");
+    }
+    setInvitation(null);
+  };
+  //------ Handle Invited User end
 
   // Function to getGame
   const handleGetGame = async () => {
@@ -51,6 +83,14 @@ const GameScreen = () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, [user, gameId]);
+
+  useEffect(() => {
+    // Share invitation URL with the selected user
+    if (selectedUser) {
+      sendInvitationToUser(selectedUser?.socketId, invitationUrl, "YOYOYO");
+      setSelectedUser(null);
+    }
+  }, [selectedUser]);
 
   return (
     <Box
@@ -99,9 +139,7 @@ const GameScreen = () => {
             until streamer picks you up.
           </Box>
         ) : (
-          <>
-            <SignInWithGoogleButton />
-          </>
+          <>You need to sign in</>
         )}
       </Box>
 
@@ -157,6 +195,7 @@ const GameScreen = () => {
                   backgroundColor: "#414141",
                   transition: "all 0.2s",
                 }}
+                onClick={() => handleUserSelection(viewer)}
               >
                 {viewer.username}
               </Box>
