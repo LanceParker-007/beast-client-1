@@ -56,7 +56,7 @@ const SignInWithGoogleButton = () => {
           dispatch(setUser(data));
 
           Cookies.set("userInfo", JSON.stringify(data), {
-            expires: 1,
+            expires: 7,
           });
           navigate("/");
         } catch (error) {

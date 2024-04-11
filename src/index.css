@@ -4,3 +4,21 @@
 * {
   font-family: "Poppins", sans-serif;
 }
+
+.gradient-background {
+  background: linear-gradient(286deg, #2f2d2d, #e7e1e1, #1b1919);
+  background-size: 180% 180%;
+  animation: gradient-animation 15s ease infinite;
+}
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}

@@ -7,6 +7,7 @@ const initialState = {
   wasmFile: null,
   buildFolder: false,
 
+  // WIR: Shift it from here only game files should be handled here
   messageFromUnity: "",
 };
 

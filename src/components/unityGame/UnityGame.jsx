@@ -6,7 +6,12 @@ import { setMessageFromUnity } from "../../redux/slices/gameSlice";
 import { Box } from "@chakra-ui/react";
 import { setUserGameId, setLobbyCode } from "../../redux/slices/unityGameSlice";
 
-const UnityGame = () => {
+const UnityGame = ({
+  publicGameDataUrl = "",
+  publicGameFrameworkUrl = "",
+  publicGameLoaderUrl = "",
+  publicGameWasmUrl = "",
+}) => {
   const { dataFile, frameworkFile, loaderFile, wasmFile } = useSelector(
     (state) => state.gameSliceReducer
   );
@@ -19,10 +24,10 @@ const UnityGame = () => {
     loadingProgression,
     isLoaded,
   } = useUnityContext({
-    dataUrl: dataFile.fileUrl,
-    frameworkUrl: frameworkFile.fileUrl,
-    loaderUrl: loaderFile.fileUrl,
-    codeUrl: wasmFile.fileUrl,
+    dataUrl: dataFile?.fileUrl || publicGameDataUrl,
+    frameworkUrl: frameworkFile?.fileUrl || publicGameFrameworkUrl,
+    loaderUrl: loaderFile?.fileUrl || publicGameLoaderUrl,
+    codeUrl: wasmFile?.fileUrl || publicGameWasmUrl,
     webglContextAttributes: {
       preserveDrawingBuffer: true,
     },
