@@ -13,14 +13,7 @@ const initialState = {
   videoId: "",
 
   //   Viewers
-  viewers: [
-    { _id: 1, username: "User1" },
-    { _id: 2, username: "User2" },
-    { _id: 3, username: "User3" },
-    { _id: 4, username: "User4" },
-    { _id: 1, username: "User5" },
-  ],
-
+  viewers: {},
   // isLoading Game or Video/Stream
   isLoading: false,
   successMessage: false,
@@ -33,6 +26,12 @@ const gameScreenSlice = createSlice({
   reducers: {
     setViewers(state, action) {
       state.viewers = action.payload;
+    },
+    setGameFilesEmpty(state, action) {
+      state.dataFile = "";
+      state.frameworkFile = "";
+      state.loaderFile = "";
+      state.wasmFile = "";
     },
   },
   extraReducers: (builder) => {
@@ -56,6 +55,6 @@ const gameScreenSlice = createSlice({
   },
 });
 
-export const { setViewers } = gameScreenSlice.actions;
+export const { setViewers, setGameFilesEmpty } = gameScreenSlice.actions;
 const gameScreenSliceReducer = gameScreenSlice.reducer;
 export default gameScreenSliceReducer;

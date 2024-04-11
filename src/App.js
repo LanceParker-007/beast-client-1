@@ -2,15 +2,11 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import "./App.scss";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
-import { Box, useToast } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import Home from "./pages/Home/Home";
 import ContactUs from "./pages/ContactUs";
 import Docs from "./pages/Docs";
 import TestIntegration from "./pages/TestIntegration";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import Cookies from "js-cookie";
-import { setIsAuthenticated, setUser } from "./redux/slices/authSlice";
 import AllGames from "./pages/AllGames";
 // import About from "./pages/About";
 // import Privacy from "./pages/Privacy";
@@ -18,18 +14,31 @@ import AllGames from "./pages/AllGames";
 // import TermsAndConditions from "./pages/TermsAndConditions";
 import GameScreen from "./pages/GameScreen";
 import Account from "./pages/Account";
-import TestingMainFeature from "./pages/TestingMainFeature/TestingMainFeature";
+import PrivateRoutes from "./utils/PrivateRoutes";
+import { useToast } from "@chakra-ui/react";
+import { useDispatch, useSelector } from "react-redux";
+import Cookies from "js-cookie";
+import { useEffect } from "react";
+import {
+  setIsAuthenticated,
+  setUser,
+  setUserToken,
+} from "./redux/slices/authSlice";
 
 function App() {
-  const { user, testBuilds } = useSelector((state) => state.authSliceReducer);
+  const { user, userToken, isAuthenticated, testBuilds } = useSelector(
+    (state) => state.authSliceReducer
+  );
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const toast = useToast();
 
   useEffect(() => {
-    const userInfo = Cookies.get("userInfo");
+    const userToken = Cookies.get("userToken");
+    const userInfo = localStorage.getItem("userInfo");
     if (userInfo) {
       dispatch(setUser(JSON.parse(userInfo)));
+      dispatch(setUserToken(userToken));
       setIsAuthenticated(true);
     } else {
       toast({
@@ -47,30 +56,26 @@ function App() {
   return (
     <>
       <Header />
-      <Box minHeight={"50vh"} mt={"11vh"}>
+      <Box height={"100vh"} mt={"11vh"}>
         <Routes>
           <Route path="/" element={<Home />} />
+          {/* <Route element={<PrivateRoutes />}> */}
           <Route path="/docs" element={<Docs />} />
-          <Route
-            path="/test-your-game"
-            element={<TestIntegration user={user} testBuilds={testBuilds} />}
-          />
-          <Route
-            path="/testing-main-feature/:userId"
-            element={<TestingMainFeature user={user} />}
-          />
+          <Route path="/test-your-game" element={<TestIntegration />} />
           <Route path="/games" element={<AllGames />} />
           <Route path="/games/:userId/:gameId" element={<GameScreen />} />
           <Route path="/account" element={<Account />} />
-          {/* <Route path="/#about-us" element={<About />} /> */}
           <Route path="/contact-us" element={<ContactUs />} />
+          {/* </Route> */}
+
+          {/* <Route path="/#about-us" element={<About />} /> */}
           {/* <Route path="/terms-of-service" element={<TermsAndConditions />} /> */}
           {/* <Route path="/privacy-policy" element={<Privacy />} /> */}
           {/* <Route path="/developers" element={<Developers />} /> */}
           {/* <Route path="/*" element={<Docs />} /> */}
         </Routes>
+        <Footer />
       </Box>
-      <Footer />
     </>
   );
 }

@@ -7,48 +7,50 @@ import UnityGame from "../components/unityGame/UnityGame";
 import { useDispatch } from "react-redux";
 import { getGame } from "../redux/actions/gameScreenActions";
 import SignInWithGoogleButton from "../components/signInWithGoogleButton/SignInWithGoogleButton";
-import { setViewers } from "../redux/slices/gameScreenSlice";
+import useSocketConnection from "../utils/socket";
+import { setGameFilesEmpty } from "../redux/slices/gameScreenSlice";
+import { useNavigate } from "react-router-dom";
 
 const videoId = "mp_t-oMycyE" || process.env.REACT_APP_DUMMY_VIDEO_ID;
 const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
 
 const GameScreen = () => {
   const { userId, gameId } = useParams();
+  console.log(gameId);
   const { user } = useSelector((state) => state.authSliceReducer);
   const { gamename, dataFile, frameworkFile, loaderFile, wasmFile, viewers } =
     useSelector((state) => state.gameScreenSliceReducer);
-
+  // Custom hook to get connected to socket
+  const { connectToSocketNetwork, disconnectFromSocketNetwork } =
+    useSocketConnection(user, userId, gameId);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [streamLink, setStreamLink] = useState(videoUrl);
 
   // Function to getGame
   const handleGetGame = async () => {
-    console.log("here");
     await dispatch(getGame({ gameId }));
   };
 
   useEffect(() => {
-    handleGetGame();
-  }, [gameId]);
-
-  useEffect(() => {
-    if (user && user?._id !== userId) {
-      const updaterViewers = [...viewers];
-      const findUser = updaterViewers.find((viewer) => viewer === user);
-      if (!findUser) updaterViewers.push(user);
-      dispatch(setViewers(updaterViewers));
-      // Add to socket room
+    if (user !== null && user !== "" && user !== undefined && gameId) {
+      connectToSocketNetwork(user, userId, gameId);
     }
+    if (user && user?._id === userId) handleGetGame();
 
-    return () => {
-      const updatedViewers = viewers.filter(
-        (viewer) => viewer._id !== user?._id
-      );
-      dispatch(setViewers(updatedViewers));
-      // Remove from socket room
+    // Listen for beforeunload event
+    const handleBeforeUnload = () => {
+      if (userId && gameId) disconnectFromSocketNetwork(user, userId, gameId);
+      dispatch(setGameFilesEmpty());
     };
-  }, [user]);
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    // Cleanup function for unmounting
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [user, gameId]);
 
   return (
     <Box
@@ -103,7 +105,7 @@ const GameScreen = () => {
         )}
       </Box>
 
-      {/* CHat section or Waiting room */}
+      {/* Chat section or Waiting room */}
       <Box
         bgColor={"white"}
         borderRadius={11}
@@ -133,27 +135,31 @@ const GameScreen = () => {
             },
           }}
         >
-          {viewers.map((viewer, index) => (
-            <Box
-              key={index}
-              bgColor={"#141414"}
-              color={"white"}
-              padding={2}
-              borderRadius={11}
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              fontFamily={"DM Monospace, monospace"}
-              cursor={"pointer"}
-              _hover={{
-                transform: "scale(0.99)",
-                backgroundColor: "#414141",
-                transition: "all 0.2s",
-              }}
-            >
-              {viewer.username}
-            </Box>
-          ))}
+          {viewers &&
+            userId &&
+            gameId &&
+            viewers[`${userId}${gameId}`] &&
+            viewers[`${userId}${gameId}`].map((viewer, index) => (
+              <Box
+                key={index}
+                bgColor={"#141414"}
+                color={"white"}
+                padding={2}
+                borderRadius={11}
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                fontFamily={"DM Monospace, monospace"}
+                cursor={"pointer"}
+                _hover={{
+                  transform: "scale(0.99)",
+                  backgroundColor: "#414141",
+                  transition: "all 0.2s",
+                }}
+              >
+                {viewer.username}+l
+              </Box>
+            ))}
         </Box>
       </Box>
     </Box>

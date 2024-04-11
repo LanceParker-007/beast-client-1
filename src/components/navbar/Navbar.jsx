@@ -12,7 +12,11 @@ import {
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { setUser } from "../../redux/slices/authSlice";
+import {
+  setIsAuthenticated,
+  setUser,
+  setUserToken,
+} from "../../redux/slices/authSlice";
 import Cookies from "js-cookie";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
@@ -21,15 +25,19 @@ import { RiLogoutBoxLine } from "react-icons/ri";
 // import SignInWithGoogleButton from "../signInWithGoogleButton/SignInWithGoogleButton.jsx";
 
 // SignInWithGoogleButton created here only because getting some error when importing from the other file
-const SignInWithGoogleButton = ({ ...props }) => {
+const SignInWithGoogleButton = ({ onClose }) => {
   const toast = useToast();
   const { user } = useSelector((state) => state.authSliceReducer);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    dispatch(setUser(null));
-    Cookies.remove("userInfo");
+    dispatch(setUser("null"));
+    dispatch(setUserToken("null"));
+    dispatch(setIsAuthenticated(false));
+    localStorage.removeItem("userInfo");
+    Cookies.remove("userToken");
+    onClose();
   };
 
   return !user ? (
@@ -64,11 +72,19 @@ const SignInWithGoogleButton = ({ ...props }) => {
           });
 
           //Saving user in local storage
-          dispatch(setUser(data));
+          const userInfo = {
+            _id: data._id,
+            username: data.username,
+            email: data.email,
+            pic: data.pic,
+          };
+          localStorage.setItem("userInfo", JSON.stringify(userInfo));
+          dispatch(setUser(userInfo));
 
-          Cookies.set("userInfo", JSON.stringify(data), {
-            expires: 1,
+          Cookies.set("userToken", data.token, {
+            expires: 7,
           });
+          dispatch(setUserToken(data.token));
           navigate("/");
         } catch (error) {
           // console.log(error);
@@ -138,7 +154,7 @@ const Navbar = ({ isOpen, onClose }) => {
             {/* <LinkButton onClose={onClose} url={"/#about-us"} title={"About"} /> */}
 
             <HStack justifyContent={"center"} mt={20} width={"100%"}>
-              <SignInWithGoogleButton />
+              <SignInWithGoogleButton onClose={onClose} />
             </HStack>
           </VStack>
         </DrawerBody>

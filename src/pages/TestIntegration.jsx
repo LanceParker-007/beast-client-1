@@ -320,16 +320,6 @@ const TestIntegration = () => {
   };
 
   useEffect(() => {
-    const userInfo = Cookies.get("userInfo");
-    if (userInfo) {
-      dispatch(setUser(JSON.parse(userInfo)));
-    } else {
-      setUser(null);
-      navigate("/");
-    }
-  }, []);
-
-  useEffect(() => {
     fetchAllTestBuilds();
   }, [user]);
 
