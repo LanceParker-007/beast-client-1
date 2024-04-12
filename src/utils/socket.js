@@ -1,7 +1,7 @@
 import { io } from "socket.io-client";
 import { useDispatch } from "react-redux";
 import {
-  setInvitatedLobbyCode,
+  setInvitedLobbyCode,
   setInvitedUrl,
   setViewers,
 } from "../redux/slices/gameScreenSlice";
@@ -30,7 +30,7 @@ const useSocketConnection = (user, urlUserId, gameId) => {
     socket.on("invitation-from-steamer", ({ invitationUrl, gameLobbyCode }) => {
       console.log(invitationUrl, gameLobbyCode);
       dispatch(setInvitedUrl(invitationUrl));
-      dispatch(setInvitatedLobbyCode(gameLobbyCode));
+      dispatch(setInvitedLobbyCode(gameLobbyCode));
       dispatch(setLobbyCode(gameLobbyCode));
     });
   };
