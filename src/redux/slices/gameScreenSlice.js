@@ -39,7 +39,7 @@ const gameScreenSlice = createSlice({
     setInvitedUrl(state, action) {
       state.invitedUrl = action.payload;
     },
-    setInvitatedLobbyCode(state, action) {
+    setInvitedLobbyCode(state, action) {
       state.invitedLobbyCode = action.payload;
     },
   },
@@ -68,7 +68,7 @@ export const {
   setViewers,
   setGameFilesEmpty,
   setInvitedUrl,
-  setInvitatedLobbyCode,
+  setInvitedLobbyCode,
 } = gameScreenSlice.actions;
 const gameScreenSliceReducer = gameScreenSlice.reducer;
 export default gameScreenSliceReducer;

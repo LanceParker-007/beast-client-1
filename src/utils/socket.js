@@ -52,7 +52,7 @@ const useSocketConnection = (user, urlUserId, gameId) => {
   // Disconnect user from socket network pool
   const disconnectFromSocketNetwork = () => {
     socket.emit("leave-game-chat", user, urlUserId, gameId);
-    socket.disconnect();
+    socket.disconnect(user, urlUserId, gameId);
   };
 
   return {

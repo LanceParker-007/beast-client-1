@@ -21,7 +21,7 @@ import { getGame } from "../redux/actions/gameScreenActions";
 import useSocketConnection from "../utils/socket";
 import {
   setGameFilesEmpty,
-  setInvitatedLobbyCode,
+  setInvitedLobbyCode,
   setInvitedUrl,
 } from "../redux/slices/gameScreenSlice";
 import { useNavigate } from "react-router-dom";
@@ -72,13 +72,13 @@ const GameScreen = () => {
     // window.open(invitedUrl, "_blank");
     navigate(invitedUrl, { target: "_blank" });
     dispatch(setInvitedUrl(""));
-    dispatch(setInvitatedLobbyCode(""));
+    dispatch(setInvitedLobbyCode(""));
     onClose();
   };
 
   const handleDeclineRequest = () => {
     dispatch(setInvitedUrl(""));
-    dispatch(setInvitatedLobbyCode(""));
+    dispatch(setInvitedLobbyCode(""));
     onClose();
   };
   //------ Handle Invited User end
@@ -96,10 +96,12 @@ const GameScreen = () => {
 
     // Listen for beforeunload event
     const handleBeforeUnload = () => {
-      if (userId && gameId) disconnectFromSocketNetwork(user, userId, gameId);
-      dispatch(setGameFilesEmpty());
+      if (user && userId && gameId) {
+        disconnectFromSocketNetwork(user, userId, gameId);
+      }
+      dispatch(setGameFilesEmpty(null));
       dispatch(setInvitedUrl(""));
-      dispatch(setInvitatedLobbyCode(""));
+      dispatch(setInvitedLobbyCode(""));
     };
     window.addEventListener("beforeunload", handleBeforeUnload);
 
