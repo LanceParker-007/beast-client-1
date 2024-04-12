@@ -38,6 +38,7 @@ const SignInWithGoogleButton = ({ onClose }) => {
     localStorage.removeItem("userInfo");
     Cookies.remove("userToken");
     onClose();
+    window.open(window.location.origin, "_self");
   };
 
   return !user ? (
