@@ -11,6 +11,7 @@ import {
   ModalBody,
   ModalFooter,
   useDisclosure,
+  Input,
 } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import LiveStream from "../components/liveStream/LiveStream";
@@ -53,7 +54,7 @@ const GameScreen = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [streamLink, setStreamLink] = useState(videoUrl);
+  const [streamLink, setStreamLink] = useState("");
 
   //------ Handle select user start
   const [selectedUser, setSelectedUser] = useState(null);
@@ -181,6 +182,28 @@ const GameScreen = () => {
         ) : (
           <>You need to sign in</>
         )}
+        {user?._id === userId && (
+          <Box bgColor={"black.300"} borderRadius={6} mt={1} color={"white"}>
+            {/* <Input
+              placeholder="Paste your stream link, which your audience can watch"
+              type="text"
+              value={streamLink}
+              onChange={(e) => {
+                console.log("Here");
+                setStreamLink(() => e.target.value);
+              }}
+            /> */}
+            <input
+              placeholder="Paste your stream link, which your audience can watch"
+              type="text"
+              value={streamLink}
+              onChange={(e) => {
+                console.log("Here");
+                // setStreamLink(() => e.target.value);
+              }}
+            />
+          </Box>
+        )}
       </Box>
 
       {/* Chat section or Waiting room */}
@@ -189,6 +212,7 @@ const GameScreen = () => {
         borderRadius={11}
         height={{ base: "60vh", md: "83vh" }}
         width={{ base: "100%", lg: "35%" }}
+        marginTop={user ? 10 : 0}
       >
         <Box px={2}>
           <Heading fontFamily={"Jockey One"}>Chat room</Heading>
