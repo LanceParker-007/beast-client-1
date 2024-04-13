@@ -26,9 +26,6 @@ import {
 } from "./redux/slices/authSlice";
 
 function App() {
-  const { user, userToken, isAuthenticated, testBuilds } = useSelector(
-    (state) => state.authSliceReducer
-  );
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const toast = useToast();
@@ -59,14 +56,14 @@ function App() {
       <Box height={"100vh"} mt={"11vh"}>
         <Routes>
           <Route path="/" element={<Home />} />
-          {/* <Route element={<PrivateRoutes />}> */}
-          <Route path="/docs" element={<Docs />} />
-          <Route path="/test-your-game" element={<TestIntegration />} />
-          <Route path="/games" element={<AllGames />} />
-          <Route path="/games/:userId/:gameId" element={<GameScreen />} />
-          <Route path="/account" element={<Account />} />
-          <Route path="/contact-us" element={<ContactUs />} />
-          {/* </Route> */}
+          <Route element={<PrivateRoutes />}>
+            <Route path="/docs" element={<Docs />} />
+            <Route path="/test-your-game" element={<TestIntegration />} />
+            <Route path="/games" element={<AllGames />} />
+            <Route path="/games/:userId/:gameId" element={<GameScreen />} />
+            <Route path="/account" element={<Account />} />
+            <Route path="/contact-us" element={<ContactUs />} />
+          </Route>
 
           {/* <Route path="/#about-us" element={<About />} /> */}
           {/* <Route path="/terms-of-service" element={<TermsAndConditions />} /> */}
