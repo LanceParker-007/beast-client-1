@@ -70,6 +70,9 @@ const GameScreen = () => {
     console.log(invitedLobbyCode);
     // setLobbyCode(invitedLobbyCode);
     // window.open(invitedUrl, "_blank");
+    if (user && userId && gameId) {
+      disconnectFromSocketNetwork(user, userId, gameId);
+    }
     navigate(invitedUrl, { target: "_blank" });
     dispatch(setInvitedUrl(""));
     dispatch(setInvitedLobbyCode(""));
