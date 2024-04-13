@@ -1,19 +1,7 @@
 import { Box, Heading, Text } from "@chakra-ui/react";
-import Cookies from "js-cookie";
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
 
 const Docs = () => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const userInfo = Cookies.get("userInfo");
-    if (!userInfo) {
-      navigate("/");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <Box
       minHeight={"100vh"}

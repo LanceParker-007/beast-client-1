@@ -26,6 +26,7 @@ import {
 } from "./redux/slices/authSlice";
 
 function App() {
+  const { user } = useSelector((state) => state.authSliceReducer);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const toast = useToast();
@@ -56,7 +57,7 @@ function App() {
       <Box height={"100vh"} mt={"11vh"}>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route element={<PrivateRoutes />}>
+          <Route element={<PrivateRoutes user={user} />}>
             <Route path="/docs" element={<Docs />} />
             <Route path="/test-your-game" element={<TestIntegration />} />
             <Route path="/games" element={<AllGames />} />
@@ -69,7 +70,7 @@ function App() {
           {/* <Route path="/terms-of-service" element={<TermsAndConditions />} /> */}
           {/* <Route path="/privacy-policy" element={<Privacy />} /> */}
           {/* <Route path="/developers" element={<Developers />} /> */}
-          {/* <Route path="/*" element={<Docs />} /> */}
+          <Route path="/*" element={<Home />} />
         </Routes>
         <Footer />
       </Box>
