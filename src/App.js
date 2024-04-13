@@ -57,14 +57,14 @@ function App() {
       <Box height={"100vh"} mt={"11vh"}>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route element={<PrivateRoutes user={user} />}>
-            <Route path="/docs" element={<Docs />} />
-            <Route path="/test-your-game" element={<TestIntegration />} />
-            <Route path="/games" element={<AllGames />} />
-            <Route path="/games/:userId/:gameId" element={<GameScreen />} />
-            <Route path="/account" element={<Account />} />
-            <Route path="/contact-us" element={<ContactUs />} />
-          </Route>
+          {/* <Route element={<PrivateRoutes user={user} />}> */}
+          <Route path="/docs" element={<Docs />} />
+          <Route path="/test-your-game" element={<TestIntegration />} />
+          <Route path="/games" element={<AllGames />} />
+          <Route path="/games/:userId/:gameId" element={<GameScreen />} />
+          <Route path="/account" element={<Account />} />
+          <Route path="/contact-us" element={<ContactUs />} />
+          {/* </Route> */}
 
           {/* <Route path="/#about-us" element={<About />} /> */}
           {/* <Route path="/terms-of-service" element={<TermsAndConditions />} /> */}
