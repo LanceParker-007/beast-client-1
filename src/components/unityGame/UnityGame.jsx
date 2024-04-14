@@ -5,6 +5,7 @@ import { Unity, useUnityContext } from "react-unity-webgl";
 import { setMessageFromUnity } from "../../redux/slices/gameSlice";
 import { Box } from "@chakra-ui/react";
 import { setUserGameId, setLobbyCode } from "../../redux/slices/unityGameSlice";
+import { setInvitedLobbyCode } from "../../redux/slices/gameScreenSlice";
 
 const UnityGame = ({
   publicGameDataUrl = "",
@@ -47,7 +48,8 @@ const UnityGame = ({
   }, []);
 
   const handleLobbyCode = useCallback((LobbyCode) => {
-    console.log(LobbyCode);
+    console.log("Entered", LobbyCode);
+    dispatch(setInvitedLobbyCode(LobbyCode));
     dispatch(setLobbyCode(LobbyCode));
     dispatch(setMessageFromUnity(`${LobbyCode} received from unity`));
   }, []);
@@ -102,7 +104,6 @@ const UnityGame = ({
   }, [lobbyCode]);
 
   useEffect(() => {
-    console.log("ILC", invitedLobbyCode);
     if (invitedLobbyCode) dispatch(setLobbyCode(invitedLobbyCode));
   }, [invitedLobbyCode]);
 
