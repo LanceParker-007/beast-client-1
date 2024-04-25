@@ -5,13 +5,13 @@ const videoWithTransparentBackground =
 
 const features = [
   {
-    title: "Enjoy on any device",
-    desc: "Play simple and exciting games for free on your Mobiles, Laptops and  more.",
+    title: "Don't simply watch",
+    desc: "Play simple and exciting mulitplaer games for free on your Mobiles, Laptops and  more.",
     videoSrc: videoWithBackgroundColor,
   },
   {
-    title: "Win real cash",
-    desc: "What makes us even better? You have the chance to win real cash rewards!",
+    title: "Increase engagement",
+    desc: "What makes us even better? You have the chance to trigger in game events.",
     videoSrc: videoWithTransparentBackground,
   },
 ];

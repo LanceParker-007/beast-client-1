@@ -27,8 +27,8 @@ const Home = () => {
         </div>
         <div className="container">
           <div className="side-info">
-            <span>Earn by playing and winning</span>
-            <h1>Simple Games</h1>
+            <span>Play the best multiplayer games with your favourite</span>
+            <h1>Streamers</h1>
             <hr />
             <Link to="/games">Play</Link>
           </div>
@@ -47,27 +47,27 @@ const Home = () => {
             cursor={"grab"}
           >
             <MainCard
-              cardHeading={"Image 1"}
-              cardSubHeading={"Category 1"}
+              cardHeading={"Shooting Game s4"}
+              cardSubHeading={"2 Player"}
               cursor={"grab"}
-              gameThumbnailLargeSrc={image.clickWarsFight}
-              gameThumbnailSmallSrc={image.clickWarsFight}
+              gameThumbnailLargeSrc={image.shootingGame4}
+              gameThumbnailSmallSrc={image.shootingGame4}
             />
             <MainCard
-              cardHeading={"Image 2"}
-              cardSubHeading={"Category 2"}
+              cardHeading={"Shooting Game 3"}
+              cardSubHeading={"2 Player"}
               cursor={"grab"}
-              gameThumbnailLargeSrc={image.clickWar}
-              gameThumbnailSmallSrc={image.clickWar}
-              cardLink="/games/click-war"
+              gameThumbnailLargeSrc={image.shootingGame3}
+              gameThumbnailSmallSrc={image.shootingGame3}
+              // cardLink="/games/click-war"
             />
-            <MainCard
-              cardHeading={"Image 2"}
-              cardSubHeading={"Category 2"}
+            {/* <MainCard
+              cardHeading={"Shooting Game 4"}
+              cardSubHeading={"2 Player"}
               cursor={"grab"}
-              gameThumbnailLargeSrc={image.clickWarsBattleRoyal}
-              gameThumbnailSmallSrc={image.clickWarsBattleRoyal}
-            />
+              gameThumbnailLargeSrc={image.shootingGame4}
+              gameThumbnailSmallSrc={image.shootingGame4}
+            /> */}
           </HStack>
         </div>
       </section>
